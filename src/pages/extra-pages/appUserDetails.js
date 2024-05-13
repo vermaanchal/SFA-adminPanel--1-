@@ -1,5 +1,5 @@
 import MainCard from 'components/MainCard';
-import { Grid, Dialog,DialogTitle, DialogContent, DialogActions, TextField,Button  } from '@mui/material';
+import { Grid, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 // import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import EditCalendarOutlinedIcon from '@mui/icons-material/EditCalendarOutlined';
@@ -10,9 +10,9 @@ import Hook from './Hook';
 import { ToastContainer } from 'react-toastify';
 const AppUserDetails = () => {
   const { filter, search, openPreview, previewImageUrl, setSearch,
-    handleClosePreview, handleDelete, handleEdit ,setUserId,setName,setDob,setMobile,setEmail,setPassword
-    ,userId,name,dob,mobile,email,password,downloadCSV,
-    open,handleClose,handleSubmit} = Hook()
+    handleClosePreview, handleDelete, handleEdit, setUserId, setName, setDob, setMobile, setEmail, setPassword
+    , userId, name, dob, mobile, email, password, downloadCSV,
+    open, handleClose, handleSubmit } = Hook()
 
   const column = [
     {
@@ -27,7 +27,7 @@ const AppUserDetails = () => {
     {
       name: 'Mobile No',
       selector: row => row.mobile,
-      width:'150px'
+      width: '150px'
     },
     {
       name: 'Email',
@@ -42,6 +42,8 @@ const AppUserDetails = () => {
     {
       name: 'DOB',
       selector: row => row.dob,
+      width: "150px"
+
     },
     {
       name: 'Agency',
@@ -59,27 +61,27 @@ const AppUserDetails = () => {
       name: 'Action',
       cell: (row) => {
         const userId = row.userId;
-        const name =row.name;
-        const mobile =row.mobile;
-        const email =row.email;
-        const password =row.password;
-        const dob= row.dob;
-        return(
-        <>
-          <div className='py-4'>
-            <span className='editIcon'>
-              <EditCalendarOutlinedIcon  onClick={() => {
-              handleEdit(userId,name,mobile,email,password,dob);
-            }}  style={{ color: 'orange',cursor:"pointer" }} />
-            </span>
-            <span className='deleteIcon' >
-              <DeleteOutlinedIcon onClick={() => handleDelete(userId)} style={{ color: 'red',cursor:"pointer" }} />
-            </span>
-          </div>
-        </>
+        const name = row.name;
+        const mobile = row.mobile;
+        const email = row.email;
+        const password = row.password;
+        const dob = row.dob;
+        return (
+          <>
+            <div className='py-4'>
+              <span className='editIcon'>
+                <EditCalendarOutlinedIcon onClick={() => {
+                  handleEdit(userId, name, mobile, email, password, dob);
+                }} style={{ color: 'orange', cursor: "pointer" }} />
+              </span>
+              <span className='deleteIcon' >
+                <DeleteOutlinedIcon onClick={() => handleDelete(userId)} style={{ color: 'red', cursor: "pointer" }} />
+              </span>
+            </div>
+          </>
         )
-        },
-        width:"200px"
+      },
+      width: "200px"
     }
   ]
   const tableHeaderStyle = {
@@ -123,7 +125,7 @@ const AppUserDetails = () => {
                     <div className='searchIcon'><SearchOutlinedIcon /></div>
                   </div>
                   <div>
-                    <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                    <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
                   </div>
                 </div>
               </>
@@ -137,79 +139,79 @@ const AppUserDetails = () => {
         </DialogContent>
       </Dialog>
       <Dialog open={open} onClose={handleClose}>
-      <DialogTitle className='editTitle'>Edit User Details</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          // margin="dense"
-          label="User ID"
-          type="text"
-          name="userId"
-          value={userId}
-          onChange={(e)=>setUserId(e.target.value)}
-          style={{ display: 'none' }} // Hidden field
-        />
-        <TextField
-          margin="dense"
-          label="Name"
-          type="text"
-          name="name"
-          fullWidth
-          value={name}
-          onChange={(e)=>setName(e.target.value)}
-          className='editInputField'
-        />
-        <TextField
-          margin="dense"
-          label="Mobile Number"
-          type="tel"
-          name="mobile"
-          fullWidth
-          value={mobile}
-          onChange={(e)=>setMobile(e.target.value)}
-          className='editInputField'
-        />
-        <TextField
-          margin="dense"
-          label="Date of Birth"
-          type="date"
-          name="dob"
-          InputLabelProps={{ shrink: true }}
-          fullWidth
-          value={dob}
-          onChange={(e)=>setDob(e.target.value)}
-          className='editInputField'
-        />
-        <TextField
-          margin="dense"
-          label="Email Address"
-          type="email"
-          name="email"
-          fullWidth
-          value={email}
-          onChange={(e)=>setEmail(e.target.value)}
-          className='editInputField'
-        />
-        <TextField
-          margin="dense"
-          label="Password"
-          type="password"
-          name="password"
-          fullWidth
-          value={password}
-          onChange={(e)=>setPassword(e.target.value)}
-          className='editInputField'
-        />
-      </DialogContent>
-      <DialogActions className='editButtonDiv'>
-        <Button onClick={handleClose} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
-          Submit
-        </Button>
-      </DialogActions>
-    </Dialog>
+        <DialogTitle className='editTitle'>Edit User Details</DialogTitle>
+        <DialogContent>
+          <TextField
+            // autoFocus
+            margin="dense"
+            label="User ID"
+            type="text"
+            name="userId"
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
+            style={{ display: 'none' }} // Hidden field
+          />
+          <TextField
+            margin="dense"
+            label="Name"
+            type="text"
+            name="name"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className='editInputField'
+          />
+          <TextField
+            margin="dense"
+            label="Mobile Number"
+            type="tel"
+            name="mobile"
+            fullWidth
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            className='editInputField'
+          />
+          <TextField
+            margin="dense"
+            label="Date of Birth"
+            type="date"
+            name="dob"
+            InputLabelProps={{ shrink: true }}
+            fullWidth
+            value={dob}
+            onChange={(e) => setDob(e.target.value)}
+            className='editInputField'
+          />
+          <TextField
+            margin="dense"
+            label="Email Address"
+            type="email"
+            name="email"
+            fullWidth
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className='editInputField'
+          />
+          <TextField
+            margin="dense"
+            label="Password"
+            type="password"
+            name="password"
+            fullWidth
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className='editInputField'
+          />
+        </DialogContent>
+        <DialogActions className='editButtonDiv'>
+          <Button onClick={handleClose} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+            Submit
+          </Button>
+        </DialogActions>
+      </Dialog>
     </MainCard>
   )
 };

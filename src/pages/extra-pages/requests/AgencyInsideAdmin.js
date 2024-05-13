@@ -19,7 +19,7 @@ const AgencyInsideAdmin = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
-  
+    const [message,setmessage] =useState("")
     //---------------fetch data---------------//
     const fetchData = async () => {
       try {
@@ -32,8 +32,14 @@ const AgencyInsideAdmin = () => {
         });
     
         const res = await req.json();
-        setData(res.agencyRequestList);
-        setFilter(res.agencyRequestList);
+        if(res.status == true){
+          setData(res.agencyRequestList);
+          setFilter(res.agencyRequestList);
+        }
+        else{
+          setmessage("No data is available")
+      }
+
       } catch (error) {
         console.log(error);
       }
@@ -56,8 +62,8 @@ const AgencyInsideAdmin = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        Object.keys(filter[0]).join(','), // Header row
-        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+        Object.keys(filter[0]).join(','),
+        ...filter.map((row) => Object.values(row).join(',')),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -212,6 +218,7 @@ const handleBack=()=>{
         </Grid>
         <div><button className='btn btn-primary mb-3'   style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div>
         <div className='text-end'>
+          {filter ?
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
             subHeader
@@ -230,6 +237,9 @@ const handleBack=()=>{
               </>
             }
           />
+        :
+        {message}  
+        }
         </div>
       </Grid>
       <Dialog open={openPreview} onClose={handleClosePreview}>

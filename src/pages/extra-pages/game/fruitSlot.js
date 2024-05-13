@@ -1,12 +1,12 @@
 import MainCard from 'components/MainCard';
-import { Grid ,Button} from '@mui/material';
+import { Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import FruitSlotHook from './fruitSlotHook';
 const FruitSlot = () => {
-  const { filter, search, setSearch,downloadCSV } = FruitSlotHook()
+  const { filter, search, setSearch,downloadCSV ,selectgame,setSelectGame} = FruitSlotHook()
     
   const column = [
     {
@@ -87,6 +87,25 @@ const FruitSlot = () => {
                     <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
                     <div className='searchIcon'><SearchOutlinedIcon/></div>
+                  </div>
+                  <div>
+                  <FormControl className='designationForm'>
+                    <InputLabel id="select-label">Select</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      label='Select Role'
+                      id="select"
+                      value={selectgame}
+                      onChange={(e) => setSelectGame(e.target.value)}
+                      className='selectDiv'
+                    >
+                      <MenuItem value="01">Enable</MenuItem>
+                      <MenuItem value="02">Disable</MenuItem>
+                    </Select>
+                  </FormControl>
+                    <button  className='btn btn-primary ms-2 p-2' 
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                    >Start</button>
                   </div>
                   <div>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>

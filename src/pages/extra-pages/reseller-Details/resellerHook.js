@@ -82,6 +82,7 @@ const ResellerHook = () => {
         }
       }
      toast.success("Reseller created Succesfully")
+     fetchData();
     }
     catch (error) {
       console.error('error', error);

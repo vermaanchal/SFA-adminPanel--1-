@@ -11,14 +11,14 @@ const ReceivingReportHook = () => {
     const [toDate, setToDate] = useState('');
     const fetchData = async () => {
         try {
-          let req = await fetch(`${baseURLProd}TrippleSevengame_UserDetails`, {
+          let req = await fetch(`${baseURLProd}HostReceivingRecord`, {
             method: "GET",
             'Content-Type': 'application/json',
     
           })
           const res = await req.json();
-          setData(res.tripleSevengameList);
-          setFilter(res.tripleSevengameList)
+          setData(res.hostReceivingList);
+          setFilter(res.hostReceivingList)
     
         }
         catch (error) {
@@ -54,13 +54,22 @@ const ReceivingReportHook = () => {
         link.click();
       };
 
-  const handleFilter = () => {
-    const filtered = data.filter(item => {
-      const date = new Date(item.date);
-      return date >= new Date(fromDate) && date <= new Date(toDate);
-    });
-    setFilter(filtered);
-  };
+      const handleFilter = () => {
+        const filtered = data.filter(item => {
+            const parts = item.date.split('-');
+            const day = parseInt(parts[0], 10);
+            const month = parseInt(parts[1], 10) - 1; 
+            const year = parseInt(parts[2], 10);
+      
+            const date = new Date(year, month, day);
+      
+            const from = fromDate ? new Date(fromDate) : null;
+            const to = toDate ? new Date(toDate) : null;
+      
+            return (!from || date >= from) && (!to || date <= to);
+        });
+        setFilter(filtered);
+      };
   return {
     filter, search, setSearch,downloadCSV,handleFilter,fromDate,toDate,setFromDate,setToDate
   }

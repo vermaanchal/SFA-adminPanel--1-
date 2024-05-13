@@ -206,7 +206,7 @@ const AgencyRequest = () => {
         <DialogTitle className='editTitle'>Edit Agency Details</DialogTitle>
         <DialogContent>
           <TextField
-            autoFocus
+            // autoFocus
             margin="dense"
             fullWidth
             label="User ID"

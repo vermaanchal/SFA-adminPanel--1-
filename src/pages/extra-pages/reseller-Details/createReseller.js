@@ -25,17 +25,17 @@ const CreateReseller = () => {
       name: " Name",
       // selector: id,
       cell: row => <div className="custom-cell">{row.name}</div>,
-      // width: '150px'
+      width: '250px'
     }, {
       name: "Mobile",
       // selector: id,
       cell: row => <div className="custom-cell">{row.mobile}</div>,
-      // width: '160px'
+      width: '270px'
     }, {
       name: "Email",
       // selector: id,
       cell: row => <div className="custom-cell">{row.email}</div>,
-      // width: '160px'
+      width: '270px'
     },
     {
       name: 'Reseller Type',

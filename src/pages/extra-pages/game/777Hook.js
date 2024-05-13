@@ -7,7 +7,7 @@ const TripleSevenHook = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
-
+    const [selectgame,setSelectGame] =useState("")
     const fetchData = async () => {
         try {
           let req = await fetch(`${baseURLProd}TrippleSevengame_UserDetails`, {
@@ -53,7 +53,7 @@ const TripleSevenHook = () => {
         link.click();
       };
   return {
-    filter, search, setSearch,downloadCSV
+    filter, search, setSearch,downloadCSV,selectgame,setSelectGame
   }
 }
 

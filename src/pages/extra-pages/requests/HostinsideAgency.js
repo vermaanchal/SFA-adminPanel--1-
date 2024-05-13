@@ -19,21 +19,26 @@ const HostInsideAgency = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
-  
+    const [message,setmessage] =useState('')
     //---------------fetch data---------------//
     const fetchData = async () => {
       try {
         let req = await fetch(`${baseURLProd}HostInsideAgency`, {
           method: "POST",
           headers: {
-            'Content-Type': 'application/json' // Set Content-Type header here
+            'Content-Type': 'application/json'
           },
           body: JSON.stringify({ agencyCode: params.agencyCode }),
         });
     
         const res = await req.json();
-        setData(res.hostRequestList);
-        setFilter(res.hostRequestList);
+        if(res.status == true){
+          setData(res.hostRequestList);
+          setFilter(res.hostRequestList);
+        }
+        else{
+          setmessage("no data available")
+        }
       } catch (error) {
         console.log(error);
       }
@@ -172,6 +177,7 @@ const HostInsideAgency = () => {
         </Grid>
         {/* <div><button className='btn btn-primary mb-3'   style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div> */}
         <div className='text-end'>
+          {filter ?
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
             subHeader
@@ -190,6 +196,9 @@ const HostInsideAgency = () => {
               </>
             }
           />
+          :
+          {message}
+          }
         </div>
       </Grid>
       <Dialog open={openPreview} onClose={handleClosePreview}>

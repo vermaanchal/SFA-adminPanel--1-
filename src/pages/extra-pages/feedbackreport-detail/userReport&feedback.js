@@ -26,7 +26,7 @@ const UserReportnFeedback = () => {
           
         </>
       ),
-      width: '180px'
+      // width: '180px'
     },
     {
       name: "Message",
@@ -34,14 +34,14 @@ const UserReportnFeedback = () => {
       cell: row => <div className="custom-cell">{row.message}</div>,
       // width: '160px'
     }, {
-      name: "Date",
-      // selector: id,
-      cell: row => <div className="custom-cell">{row.date}</div>,
-      // width: '160px'
-    }, {
       name: "Type",
       // selector: id,
       cell: row => <div className="custom-cell">{row.type}</div>,
+      // width: '160px'
+    }, {
+      name: "Date",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.date}</div>,
       // width: '160px'
     }
   

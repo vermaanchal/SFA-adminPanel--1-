@@ -14,34 +14,28 @@ const DeviceIdBlockUnblock = () => {
    
     {
       name: "User Id",
-      // selector: id,
       cell : row => <div className="custom-cell">{row.userId}</div>,
       // width: '100px'
     },
     {
       name: "Name",
-      // selector: id,
       cell : row => <div className="custom-cell">{row.name}</div>,
-      // width: '170px'
+      width: '200px'
     },{
       name: "Mobile Number",
-      // selector: id,
       cell : row => <div className="custom-cell">{row.mobile}</div>,
-      // width: '170px'
+      width: '210px'
     },{
       name: "Email",
-      // selector: id,
       cell : row => <div className="custom-cell">{row.email}</div>,
-      width: '250px'
+      width: '280px'
     },{
       name: "Password",
-      // selector: id,
       cell : row => <div className="custom-cell">{row.password}</div>,
       width: '170px'
     },
     {
       name: "Device Id",
-      // selector: price,
       cell : row => <div className="custom-cell">{row.deviceId}</div>,
       width:'170px'
     },

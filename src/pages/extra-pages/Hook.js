@@ -49,12 +49,12 @@ const Hook = () => {
     const handleDelete = async (userId) => {
         await fetch(`${baseURLProd}DeleteVideo`, {
             method: "POST",
-            body: JSON.stringify({ userId: userId}),
+            body: JSON.stringify({ userId: userId }),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        const newData = data.filter(row => (row.userid !== userId ));
+        const newData = data.filter(row => (row.userid !== userId));
         setFilter(newData);
         fetchData();
         toast.success("User Detail deleted successfully")
@@ -122,7 +122,7 @@ const Hook = () => {
             })
             .catch(error => console.error('Error downloading image:', error));
     };
-
+   //------------image click --------------------//
     const handleImageClick = (imageUrl) => {
         setPreviewImageUrl(imageUrl);
         setOpenPreview(true);

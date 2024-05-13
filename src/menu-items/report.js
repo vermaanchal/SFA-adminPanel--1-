@@ -29,16 +29,16 @@ import {
     children: [
       {
         id: 'receiving-report',
-        title: 'Receiving Report',
+        title: 'Host Receiving Report',
         type: 'item',
-        url: '/ReceivingReport',
+        url: '/HostReceivingReport',
         icon: icons.ReceiptLongOutlinedIcon
       },
       {
         id: 'sending-report',
-        title: 'Sending Report',
+        title: 'User Sending Report',
         type: 'item',
-        url: '/SendingReport',
+        url: '/UserSendingReport',
         icon: icons.ForwardToInboxOutlinedIcon
       },
     ]

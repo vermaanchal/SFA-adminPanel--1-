@@ -1,14 +1,14 @@
 
 import MainCard from 'components/MainCard';
-import { Grid ,Button} from '@mui/material';
+import { Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import TripleSevenHook from './777Hook';
 const TripleSeven = () => {
-  const { filter, search, setSearch,downloadCSV } = TripleSevenHook()
-    
+  const { filter, search, setSearch, downloadCSV,setSelectGame,selectgame } = TripleSevenHook()
+
   const column = [
     {
       name: "User Id",
@@ -22,14 +22,14 @@ const TripleSeven = () => {
       cell: row => <div className="custom-cell">{row.name}</div>,
       // width: '150px'
     },
-    
+
     {
       name: "Bet ",
       // selector: id,
       cell: row => <div className="custom-cell">{row.bet}</div>,
       // width: '160px'
     },
-   {
+    {
       name: "Win/Loss",
       // selector: id,
       cell: row => <div className="custom-cell">{row.results}</div>,
@@ -41,12 +41,12 @@ const TripleSeven = () => {
       width: '200px'
     }
     , {
-        name: "Available Coins ",
-        // selector: id,
-        cell: row => <div className="custom-cell">{row.availableCoins}</div>,
-        // width: '160px'
-      }
-  
+      name: "Available Coins ",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.availableCoins}</div>,
+      // width: '160px'
+    }
+
   ]
   const tableHeaderStyle = {
     headCells: {
@@ -87,10 +87,29 @@ const TripleSeven = () => {
                   <div className='d-flex'>
                     <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon/></div>
+                    <div className='searchIcon'><SearchOutlinedIcon /></div>
                   </div>
                   <div>
-                    <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                  <FormControl className='designationForm'>
+                    <InputLabel id="select-label">Select</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      label='Select Role'
+                      id="select"
+                      value={selectgame}
+                      onChange={(e) => setSelectGame(e.target.value)}
+                      className='selectDiv'
+                    >
+                      <MenuItem value="01">Enable</MenuItem>
+                      <MenuItem value="02">Disable</MenuItem>
+                    </Select>
+                  </FormControl>
+                    <button  className='btn btn-primary ms-2 p-2' 
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                    >Start</button>
+                  </div>
+                  <div>
+                    <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
                   </div>
                 </div>
               </>

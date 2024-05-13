@@ -90,7 +90,7 @@ const DeductResellerHook = () => {
   }
 
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit,handleChange
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit,handleChange,fetchData
   }
 }
 

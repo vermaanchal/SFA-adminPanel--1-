@@ -25,31 +25,31 @@ const ReceivingReport = () => {
     {
       name: "Agency Code ",
       // selector: id,
-      cell: row => <div className="custom-cell">{row.bet}</div>,
+      cell: row => <div className="custom-cell">{row.agencyCode}</div>,
       // width: '160px'
     },
     {
       name: "Admin Id",
       // selector: id,
-      cell: row => <div className="custom-cell">{row.results}</div>,
+      cell: row => <div className="custom-cell">{row.adminId}</div>,
+      // width: '160px'
+    }
+    , {
+      name: "Available Beans ",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.availableBeans}</div>,
+      width: '200px'
+    }
+    , {
+      name: "Receiving ",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.receiving}</div>,
       // width: '160px'
     }, {
       name: " Month Date ",
       // selector: id,
       cell: row => <div className="custom-cell">{row.date}</div>,
-      width: '200px'
-    }
-    , {
-      name: "Available Beans ",
-      // selector: id,
-      cell: row => <div className="custom-cell">{row.availableCoins}</div>,
-      // width: '160px'
-    }
-    , {
-      name: "Receiving ",
-      // selector: id,
-      cell: row => <div className="custom-cell">{row.availableCoins}</div>,
-      // width: '160px'
+      // width: '200px'
     }
   ]
   const tableHeaderStyle = {
@@ -97,7 +97,7 @@ const ReceivingReport = () => {
                     <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
                   </div>
                 </div>
-                <div className='my-4 me-3 d-flex justify-content-end'>
+                <div className='my-4 d-flex justify-content-end'>
                   <label htmlFor='fromDate' className='labelfordate'>From Date:</label>
                   <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} className=' form-control searchDateInput' />
                   <label htmlFor='toDate' className='labelfordate'>To Date:</label>

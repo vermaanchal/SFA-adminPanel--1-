@@ -28,6 +28,7 @@ const StatusHook = () => {
       fetchData();
   }, []);
 
+  //---------------filter data on search-------------//
   useEffect(() => {
     const result = data.filter((item) => {
         return item.userId.toLowerCase().match(search.toLocaleLowerCase())
@@ -35,6 +36,7 @@ const StatusHook = () => {
     setFilter(result)
 }, [search])
 
+//-----------request Approve ---------------//
 const handleApprove = async ({agencyCode,userId}) => {
   try {
     await fetch(`${baseURLProd}HostRequestApprove`, {
@@ -56,7 +58,7 @@ const handleApprove = async ({agencyCode,userId}) => {
     console.error('Error approving request:', error);
   }
 };
-
+// -----------------request Reject--------------//
 const handleReject = async ({agencyCode,userId}) => {
   try {
     await fetch(`${baseURLProd}HostRequestReject`, {
@@ -85,7 +87,7 @@ const handlePopup = (userId) => {
   console.log(userId)
   setOpenPreview(true);
 };
-
+//----------download csv---------------------//
 const downloadCSV = () => {
   // Format the data for CSV
   const csvContent =

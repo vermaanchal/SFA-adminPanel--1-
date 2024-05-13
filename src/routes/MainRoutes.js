@@ -175,11 +175,11 @@ const MainRoutes = {
       element: <HostInsideAgency />
     },
     {
-      path:'ReceivingReport',
+      path:'HostReceivingReport',
       element:<ReceivingReport/>
     },
     {
-      path:'SendingReport',
+      path:'UserSendingReport',
       element: <SendingReport/>
     },
     {

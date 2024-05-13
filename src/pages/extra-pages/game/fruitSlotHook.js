@@ -7,6 +7,7 @@ const FruitSlotHook = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
+    const [selectgame,setSelectGame] =useState("")
 
     const fetchData = async () => {
         try {
@@ -53,7 +54,7 @@ const FruitSlotHook = () => {
         link.click();
       };
   return {
-    filter, search, setSearch,downloadCSV
+    filter, search, setSearch,downloadCSV,selectgame,setSelectGame
   }
 }
 

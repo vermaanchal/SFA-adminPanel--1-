@@ -46,10 +46,10 @@ const DeviceIdBlockUnblockHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      const rowIndex = data.findIndex(item => item.deviceId === deviceId);
+      const rowIndex = data.findIndex(item => item.deviceId === deviceId && item.userId === userId);
       if (rowIndex !== -1) {
         const updatedData = [...data];
-        updatedData[rowIndex].status = 'Blocked';
+        updatedData[rowIndex].status = 'False';
         toast.success("Id Blocked successfully")
         setData(updatedData);
         setFilter(updatedData);
@@ -73,7 +73,7 @@ const DeviceIdBlockUnblockHook = () => {
       const rowIndex = data.findIndex(item => item.deviceId === deviceId);
       if (rowIndex !== -1) {
         const updatedData = [...data];
-        updatedData[rowIndex].status = 'Unblocked';
+        updatedData[rowIndex].status = 'True';
         toast.success("ID Unblocked successfully")
         setData(updatedData);
         setFilter(updatedData)

@@ -33,7 +33,7 @@ const HostRequest = () => {
       name: "Phone",
       // selector: id,
       cell : row => <div className="custom-cell">{row.phone}</div>,
-      // width: '120px'
+      width: '150px'
     },{
       name: "Type",
       // selector: id,
@@ -43,7 +43,7 @@ const HostRequest = () => {
       name: "Agency Code",
       // selector: id,
       cell : row => <div className="custom-cell">{row.agencyCode}</div>,
-      // width: '150px'
+      width: '150px'
     },
     {
       name: "Life Photo",
@@ -55,7 +55,7 @@ const HostRequest = () => {
           <FileDownloadOutlinedIcon onClick={() => handleDownload(row.lifePhoto, 'image.jpg')} style={{ color: '#EF9848' }} />
         </>
       ),
-      // width: '150px'
+      width: '150px'
     },
     {
       name: "Home Page Photo",
@@ -64,7 +64,7 @@ const HostRequest = () => {
           <IconButton onClick={() => handleImageClick(row.homepagePhoto)} className='imgPreviewDiv'>
             <img height={70} width={80} src={row.homepagePhoto} alt='no-img' />
           </IconButton>
-          <FileDownloadOutlinedIcon onClick={() => handleDownload(row.homepagePhoto, 'image.jpg')} style={{ color: '#EF9848' }} />
+          <FileDownloadOutlinedIcon onClick={() => handleDownload(e)} style={{ color: '#EF9848' }} />
         </>
       ),
       width:"200px"
@@ -73,7 +73,7 @@ const HostRequest = () => {
       name: "Status",
       // selector: price,
       cell : row => <div className="custom-cell">{row.status}</div>,
-      // width:'120px'
+      width:'120px'
     },
     {
       name: "Host Code",
@@ -182,7 +182,7 @@ const HostRequest = () => {
       <DialogTitle className='editTitle'>Edit Host Details</DialogTitle>
       <DialogContent>
         <TextField
-          autoFocus
+          // autoFocus
           margin="dense"
           fullWidth
           label="User ID"

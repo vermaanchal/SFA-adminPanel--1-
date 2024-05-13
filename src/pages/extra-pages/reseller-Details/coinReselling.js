@@ -40,7 +40,7 @@ const CoinReselling = () => {
       name: "Available Coins",
       // selector: id,
       cell: row => <div className="custom-cell">{row.availableCoins}</div>,
-      // width: '160px'
+      width: '220px'
     }
     ,
     {

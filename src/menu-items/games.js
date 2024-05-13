@@ -3,9 +3,10 @@ import { StopOutlined, AccountBookOutlined } from '@ant-design/icons';
 import GamesOutlinedIcon from '@mui/icons-material/GamesOutlined';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import CasinoOutlinedIcon from '@mui/icons-material/CasinoOutlined';
+import LoyaltyOutlinedIcon from '@mui/icons-material/LoyaltyOutlined';
 // icons
 const icons = {
-  StopOutlined,
+  StopOutlined,LoyaltyOutlinedIcon,
   AccountBookOutlined,GamesOutlinedIcon,SportsEsportsOutlinedIcon,CasinoOutlinedIcon
 };
 
@@ -28,7 +29,7 @@ const games = {
       title: 'Teen Patti',
       type: 'item',
       url: '/TeenPati',
-      icon: icons.GamesOutlinedIcon
+      icon: icons.LoyaltyOutlinedIcon
     },
     {
       id: 'fruit-slot',

@@ -47,7 +47,6 @@ const AdminRequestHook = () => {
         }
       });
       const rowIndex = data.findIndex(item => item.adminid === adminId);
-      console.log(rowIndex,'indexx')
       if (rowIndex !== -1) {
         const updatedData = [...data];
         updatedData[rowIndex].status = 'Approved';
@@ -77,7 +76,6 @@ const AdminRequestHook = () => {
         }
       });
       const rowIndex = data.findIndex(item => item.adminid === adminId);
-      console.log(rowIndex,'aprrove index')
       if (rowIndex !== -1) {
         const updatedData = [...data];
         updatedData[rowIndex].status = 'Reject';
@@ -100,7 +98,6 @@ const AdminRequestHook = () => {
   const handleDownload = () => {
     // console.log(imageUrl,imageName,'url & name ')
     const img ='https://cdn.dummyjson.com/product-images/10/2.jpg'
-    console.log(img,'immm')
     fetch(img)
         .then(response => response.blob())
         .then(blob => {
