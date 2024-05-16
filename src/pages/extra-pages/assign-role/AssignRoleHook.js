@@ -8,7 +8,7 @@ const AssignRoleHook = () => {
     const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
     const [roleId, setRoleId] = useState([])
-    const [userValue,setUserValue] =useState("")
+    const [userValue, setUserValue] = useState("")
     const fetchData = async () => {
         try {
             let req = await fetch(`${baseURLProd}GetAssignedRoleDetails`, {
@@ -29,10 +29,10 @@ const AssignRoleHook = () => {
 
     useEffect(() => {
         const result = data.filter((item) => {
-          return item.userId.toLowerCase().match(search.toLocaleLowerCase())
+            return item.userId.toLowerCase().match(search.toLocaleLowerCase())
         })
         setFilter(result)
-      }, [search])
+    }, [search])
 
     //-------------select value--------------------
     const handleSelectChange = (e) => {
@@ -43,7 +43,7 @@ const AssignRoleHook = () => {
     const handleAssignRole = async () => {
 
         try {
-          const req = await fetch(`${baseURLProd}AssignRoles`, {
+            const req = await fetch(`${baseURLProd}AssignRoles`, {
                 method: 'POST',
                 body: JSON.stringify({
                     roleId: roleId,
@@ -54,10 +54,10 @@ const AssignRoleHook = () => {
                 }
             });
             const res = await req.json()
-            if(res.status == false){
-            toast.error(res.message)
+            if (res.status == false) {
+                toast.error(res.message)
             }
-            else{
+            else {
                 toast.success("Role assigned Successfully")
                 setUserValue("")
                 setRoleId("")
@@ -76,14 +76,16 @@ const AssignRoleHook = () => {
                 'Content-Type': 'application/json'
             }
         });
-        const newData = data.filter(row => !(row.userid === userId));
-        setFilter(newData);
-        fetchData();
-        toast.success("Role Removed successfully")
+        if (window.confirm("Are you sure to Remove the Data?")) {
+            const newData = data.filter(row => !(row.userid === userId));
+            setFilter(newData);
+            fetchData();
+            toast.success("Role Removed successfully")
+        }
     }
     return {
-         roleId, handleSelectChange,search,setSearch,filter,setUserValue,userValue
-        , handleAssignRole,handleRemove
+        roleId, handleSelectChange, search, setSearch, filter, setUserValue, userValue
+        , handleAssignRole, handleRemove
     }
 }
 

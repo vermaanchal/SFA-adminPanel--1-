@@ -63,8 +63,8 @@ span.editIcon {
   border-bottom-left-radius: 7px;
 }
 
-.rdt_TableRow,.rdt_TableCell
-.rdt_TableCol {
+.rdt_TableRow,.rdt_TableCell,.gjoprN
+.rdt_TableCol ,.rdt_TableCol_Sortable {
   font-size: 0.875rem !important;
   text-align:justify !important;
   justify-content:center !important;
@@ -103,10 +103,8 @@ span.editIcon {
 }
 .loginBtn{
   background-color: #EF9848 !important;
-  width: 23% !important;
-  display: block !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+  width: 30% !important;
+  margin-left: 140px !important;
 }
 .authLoginDiv{
   padding-left: 37px !important;
@@ -166,4 +164,12 @@ span.editIcon {
   border-radius: 10px;
   padding: 40px;
 
+}
+.emailInput{
+  width:80% !important;
+  border-radius: 7px !important;
+  padding: 5px 10px 5px 0px  !important;
+}
+.formdiv{
+  margin-left: 29px !important;
 }

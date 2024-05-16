@@ -10,7 +10,7 @@ import AuthWrapper from './AuthWrapper';
 import image from 'assets/images/users/sfaLogo.png'
 
 const Login = () => (
-  <AuthWrapper className='loginBgdiv'>
+  <AuthWrapper>
     <Grid container spacing={3}>
     <img src={image} alt='logo' style={{width:"135px",display:"block",marginLeft:"auto",marginRight:"auto"}}/>
       <Grid item xs={12}>

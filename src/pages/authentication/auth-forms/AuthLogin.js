@@ -28,6 +28,7 @@ import { Formik } from 'formik';
 // import AnimateButton from 'components/@extended/AnimateButton';
 
 // assets
+// import loginBg from '../../../assets/images/users/loginBg.png'
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
@@ -61,8 +62,12 @@ const AuthLogin = () => {
       }
 
       const data = await response.json();
-      console.log(data);
-      window.location.assign('/dashboard');
+      if(data.status == true){
+        window.location.assign('/dashboard');
+      }
+      else{
+        window.alert(data.message)
+      }
     } catch (error) {
       setStatus({ success: false });
       setErrors({ submit: error.message });
@@ -88,8 +93,9 @@ const AuthLogin = () => {
       >
         {({ errors, handleBlur, handleChange, handleSubmit, touched, values }) => (
           <form noValidate onSubmit={handleSubmit}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} className="formdiv">
               <Grid item xs={12}>
+                {/* <img src={loginBg} alt='imgdd'></img> */}
                 <Stack spacing={1}>
                   <InputLabel htmlFor="email-login">Email Address</InputLabel>
                   <OutlinedInput
@@ -102,6 +108,7 @@ const AuthLogin = () => {
                     placeholder="Enter email address"
                     fullWidth
                     error={Boolean(touched.email && errors.email)}
+                    className="emailInput"
                   />
                   {touched.email && errors.email && (
                     <FormHelperText error id="standard-weight-helper-text-email-login">
@@ -122,6 +129,7 @@ const AuthLogin = () => {
                     value={values.password}
                     name="password"
                     onBlur={handleBlur}
+                    className="emailInput"
                     onChange={handleChange}
                     endAdornment={
                       <InputAdornment position="end">

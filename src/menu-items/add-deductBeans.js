@@ -15,7 +15,7 @@ const updateBeans = {
   children: [
     {
       id: 'add-deduct-beans',
-      title: 'Add/Deduct Beans',
+      title: 'Add/Deduct Beans ',
       type: 'item',
       url: '/BeanTransferView',
       icon: icons.DashboardOutlined,

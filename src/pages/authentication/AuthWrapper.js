@@ -22,10 +22,10 @@ const AuthWrapper = ({ children }) => (
     >
       <Grid xs={12} md={12} lg={12} className='d-flex'>
       <Grid item md={6} lg={6} sx={{ ml: 3, mt: 3 }} className="d-flex justify-content-center leftDiv">
-      <img src={image} alt ='bg' width={360} height={430}/>
+      <img src={image} alt ='bg' width={380} height={475}/>
 
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
+      <Grid item xs={12} md={6} lg={6} className='d-flex justify-content-center'>
         <Grid
           item
           // xs={12}

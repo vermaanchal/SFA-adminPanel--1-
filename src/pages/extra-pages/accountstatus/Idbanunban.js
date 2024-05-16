@@ -11,8 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import StatusHook from './StatusHook';
 
 const IdBanUnban = () => {
-  const { filter, search, setSearch,handleReject, downloadCSV,
-    openPreview,handleClosePreview,handlePopup } = StatusHook()
+  const { filter, search, setSearch,handleIdUnban, downloadCSV,
+    openPreview,handleClosePreview,handlePopup,handleIdBan,setIdBanReason,idBanReason } = StatusHook()
 
   const column = [
 
@@ -77,24 +77,23 @@ const IdBanUnban = () => {
     {
       name: 'Action',
       cell: (row) => {
-        const agencyCode = row.agencyCode;
         const userId = row.userId;
-        // const isApproved = row.status === 'Approved';
-        const isRejected = row.status === 'Reject';
+        const isBanned = row.status === 'False';
+        const isUnbanned = row.status === 'True';
         return (
           <>
             <button
               className='btn btn-primary me-2'
-              onClick={() => handlePopup({userId })}
-              // disabled={isApproved}
+              onClick={() => handlePopup(userId )}
+              disabled={isBanned}
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
               Id Ban
             </button>
             <button
               className='btn btn-primary'
-              onClick={() => handleReject({ agencyCode, userId })}
-              disabled={isRejected}
+              onClick={() => handleIdUnban( userId)}
+              disabled={isUnbanned}
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
               Id UnBan
@@ -160,15 +159,15 @@ const IdBanUnban = () => {
         <DialogContent>
           {/* <img src={previewImageUrl} alt="Preview" width='260px' /> */}
           <div>
-            <h6>User Id Ban Reason </h6>
+            <h5 style={{textDecoration:"underline",marginBottom:"15px"}}>User Id Ban Reason </h5>
           </div>
-          <div><b>Ban Reason</b><span style={{color:'red'}}>*</span></div>
+          <div className='p-2'><b>Ban Reason</b><span style={{color:'red'}}>*</span></div>
           <div>
-            <textarea style={{width:"100%",height:"139px"}}></textarea>
+            <textarea style={{width:"100%",height:"139px"}} placeholder='Enter here (Minimum 20,Maximum 200 characters)' value={idBanReason} onChange={(e)=>setIdBanReason(e.target.value)}></textarea>
           </div>
           <div className='d-flex justify-content-end mt-3'>
             <button className='btn btn-primary me-3' style={{ backgroundColor: '#EF9848', border: '0px' }}onClick={handleClosePreview} >Cancel</button>
-            <button className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>save</button>
+            <button className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleIdBan}>save</button>
           </div>
         </DialogContent>
       </Dialog>

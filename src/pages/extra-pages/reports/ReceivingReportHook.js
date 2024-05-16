@@ -70,8 +70,17 @@ const ReceivingReportHook = () => {
         });
         setFilter(filtered);
       };
+
+      const handleAdminRecieving = async () => {
+        window.location.href = `/AdminReport`;
+    };
+
+    const handleAgencyRecieving = async () => {
+      window.location.href = `/AgencyReport`;
+  };
   return {
-    filter, search, setSearch,downloadCSV,handleFilter,fromDate,toDate,setFromDate,setToDate
+    filter, search, setSearch,downloadCSV,handleFilter,fromDate,toDate,setFromDate,setToDate,
+    handleAdminRecieving,handleAgencyRecieving
   }
 }
 

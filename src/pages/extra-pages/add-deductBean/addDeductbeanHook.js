@@ -6,14 +6,25 @@ const AddDeductBeanHook = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
+ //---------------- multiple files ------------//
+  const handleFileChange = (event) => {
+    setSelectedFiles(event.target.files);
+  };
+ 
+  //-----------upload multiple files--------//
+  const handleUpload =()=>{
+    console.log('upload')
+  }
+  
   //---------------fetch data---------------//
   const fetchData = async () => {
     try {
       let req = await fetch(`${baseURLProd}Add_DeductBeansUserDetails`, {
         method: "POST",
         headers: {
-          'Content-Type': 'application/json' // Set Content-Type header here
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ adminId: '123456' }),
       });
@@ -44,8 +55,8 @@ const AddDeductBeanHook = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        Object.keys(filter[0]).join(','), // Header row
-        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+        Object.keys(filter[0]).join(','),
+        ...filter.map((row) => Object.values(row).join(',')),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -91,7 +102,8 @@ const AddDeductBeanHook = () => {
   }
 
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleSelectChange
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleSelectChange,
+    selectedFiles,handleFileChange,handleUpload
   }
 }
 

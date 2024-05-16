@@ -78,10 +78,12 @@ const VideoUploadHook = () => {
                 'Content-Type': 'application/json'
             }
         });
-        const newData = data.filter(row => (row.userid !== userId && row.videoid !== videoId));
-        setFilter(newData);
-        fetchData();
-        toast.success("Video deleted successfully")
+        if (window.confirm("Are you sure to delete this data")) {
+            const newData = data.filter(row => (row.userid !== userId && row.videoid !== videoId));
+            setFilter(newData);
+            fetchData();
+            toast.success("Video deleted successfully")
+        }
     }
 
     const downloadCSV = () => {

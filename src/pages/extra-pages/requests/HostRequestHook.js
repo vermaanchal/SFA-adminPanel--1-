@@ -54,14 +54,16 @@ const HostRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      const rowIndex = data.findIndex(item => item.agencyCode === agencyCode);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'Approved';
-        toast.success("Request Approved successfully")
-        setData(updatedData);
-        setFilter(updatedData);
-        fetchData();
+      if (window.confirm("Are you sure to Approve the Request")) {
+        const rowIndex = data.findIndex(item => item.agencyCode === agencyCode);
+        if (rowIndex !== -1) {
+          const updatedData = [...data];
+          updatedData[rowIndex].status = 'Approved';
+          toast.success("Request Approved successfully")
+          setData(updatedData);
+          setFilter(updatedData);
+          fetchData();
+        }
       }
     } catch (error) {
       console.error('Error approving request:', error);
@@ -77,14 +79,16 @@ const HostRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      const rowIndex = data.findIndex(item => item.agencyCode === agencyCode && item.userId === userId);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'Reject';
-        toast.success("Request Rejected successfully")
-        setData(updatedData);
-        setFilter(updatedData);
-        fetchData()
+      if (window.confirm("Are you sure to Reject the Request")) {
+        const rowIndex = data.findIndex(item => item.agencyCode === agencyCode && item.userId === userId);
+        if (rowIndex !== -1) {
+          const updatedData = [...data];
+          updatedData[rowIndex].status = 'Reject';
+          toast.success("Request Rejected successfully")
+          setData(updatedData);
+          setFilter(updatedData);
+          fetchData()
+        }
       }
     } catch (error) {
       console.error('Error rejecting request:', error);
@@ -138,64 +142,68 @@ const HostRequestHook = () => {
     document.body.appendChild(link);
     link.click();
   };
-    //----------------get user detail---------------//
-    const handleEdit = async (userId, name, phone, type, agencyCode, hostCode) => {
-      setOpen(true);
-      setUserId(userId)
-      setName(name)
-      setPhone(phone)
-      setType(type)
-      setAgencyCode(agencyCode)
-      setHostCode(hostCode)
+  //----------------get user detail---------------//
+  const handleEdit = async (userId, name, phone, type, agencyCode, hostCode) => {
+    setOpen(true);
+    setUserId(userId)
+    setName(name)
+    setPhone(phone)
+    setType(type)
+    setAgencyCode(agencyCode)
+    setHostCode(hostCode)
 
   }
   //-----------------------edit user detail ------------------//
   const handleSubmit = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
 
-      try {
-          const response = await fetch(`${baseURLProd}UserEditDetails`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                  userId: userId,
-                  name: name,
-                  type: type,
-                  phone: phone,
-                  agencyCode: agencyCode,
-                  hostCode: hostCode,
-              }),
-          });
+    try {
+      const response = await fetch(`${baseURLProd}UserEditDetails`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: userId,
+          name: name,
+          type: type,
+          phone: phone,
+          agencyCode: agencyCode,
+          hostCode: hostCode,
+        }),
+      });
 
-          if (!response.ok) {
-              throw new Error('Failed to edit user details');
-          }
-
-          await response.json();
-          fetchData()
-          setOpen(false);
-          setUserId("")
-          setName("")
-          setPhone("")
-          setType("")
-          setAgencyCode("")
-          setHostCode("")
-          toast.success("user details changed ")
-      } catch (error) {
-          console.log(error.message);
+      if (!response.ok) {
+        throw new Error('Failed to edit user details');
       }
+
+      await response.json();
+      if (window.confirm("Are you sure to change the host details ?")) {
+
+        fetchData()
+        setOpen(false);
+        setUserId("")
+        setName("")
+        setPhone("")
+        setType("")
+        setAgencyCode("")
+        setHostCode("")
+        toast.success("user details changed ")
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+
   };
   const handleClose = () => {
     setOpen(false)
-}
+  }
   return {
     filter, search, setSearch, openPreview, setOpenPreview, previewImageUrl, setPreviewImageUrl,
     handleClosePreview, handleDownload, handleImageClick, handleApprove,
-    handleReject, downloadCSV,handleEdit,handleSubmit,handleClose,
-    open,userId,name,type,agencyCode,hostCode,phone,setOpen,setUserId,setName,setType,
-    setAgencyCode,setHostCode,setPhone
+    handleReject, downloadCSV, handleEdit, handleSubmit, handleClose,
+    open, userId, name, type, agencyCode, hostCode, phone, setOpen, setUserId, setName, setType,
+    setAgencyCode, setHostCode, setPhone
   }
 }
 

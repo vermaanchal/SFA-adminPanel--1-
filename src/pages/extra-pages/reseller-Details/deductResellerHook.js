@@ -17,7 +17,7 @@ const DeductResellerHook = () => {
       })
       const res = await req.json();
       setData(res.appResellerList);
-      setFilter(res.appResellerList)
+      setFilter(res.appResellerList);
 
     }
     catch (error) {
@@ -43,8 +43,8 @@ const DeductResellerHook = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        Object.keys(filter[0]).join(','), // Header row
-        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+        Object.keys(filter[0]).join(','),
+        ...filter.map((row) => Object.values(row).join(',')),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -55,7 +55,7 @@ const DeductResellerHook = () => {
     link.click();
   };
 
-//  //-------------select value--------------------
+  //-------------select value--------------------
   const handleChange = (e, userId) => {
     const { value } = e.target;
     const newData = filter.map(item => {
@@ -66,8 +66,8 @@ const DeductResellerHook = () => {
     });
     setFilter(newData);
   };
-  
-  // //---------------deduct Reseller-------------//
+
+  //---------------deduct Reseller-------------//
   const handleSubmit = async () => {
     try {
       for (const row of filter) {
@@ -81,16 +81,17 @@ const DeductResellerHook = () => {
           });
         }
       }
-  
+      if (window.confirm("Are you sure to Deduct coins")) {
       toast.success("Reseller coins deducted successfully");
       fetchData();
+      }
     } catch (error) {
       console.error('Error deducting reseller coins:', error);
     }
   }
 
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit,handleChange,fetchData
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleChange, fetchData
   }
 }
 

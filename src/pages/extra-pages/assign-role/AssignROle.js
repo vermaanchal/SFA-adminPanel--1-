@@ -13,17 +13,21 @@ const AssignRole = () => {
     {
       name: "User Id",
       cell: row => <div className="custom-cell">{row.userId}</div>,
+
     },
     {
       name: " Name",
       cell: row => <div className="custom-cell">{row.name}</div>,
+      width:'270px'
     },
     {
       name: "Designation Name",
       cell: row => <div className="custom-cell">{row.desigName}</div>,
+      width:'300px'
     }, {
       name: "Created Date",
       cell: row => <div className="custom-cell">{row.created_date}</div>,
+      width:"280px"
     }, {
       name: 'Action',
       cell: (row) => {
@@ -35,7 +39,8 @@ const AssignRole = () => {
             >Remove</button>
           </>
         )
-      }
+      },
+      width:'260px'
     }
 
   ]

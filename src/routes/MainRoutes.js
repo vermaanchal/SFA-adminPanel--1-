@@ -40,6 +40,8 @@ import AudioStreamingTodayReport from 'pages/extra-pages/streamingDetails/AudioS
 import AudioStreamingMonthlyReport from 'pages/extra-pages/streamingDetails/AudioStreamingMonthlyReport';
 import VideoStreamingTodayReport from 'pages/extra-pages/streamingDetails/VideoStreamingTodayReport';
 import VideoStreamingMonthlyReport from 'pages/extra-pages/streamingDetails/VideoStreamingMonthlyReport';
+import AdminReceivingReport from 'pages/extra-pages/reports/AdminReceivingReport';
+import AgencyReceivingReport from 'pages/extra-pages/reports/AgencyReceivingReport';
 
 // render - dashboard
 const DashboardDefault = Loadable(lazy(() => import('pages/dashboard')));
@@ -181,6 +183,14 @@ const MainRoutes = {
     {
       path:'UserSendingReport',
       element: <SendingReport/>
+    },
+    {
+      path: 'AdminReport',
+      element: <AdminReceivingReport />
+    },
+    {
+      path: 'AgencyReport',
+      element: <AgencyReceivingReport />
     },
     {
       path:'UserLiveDetails',

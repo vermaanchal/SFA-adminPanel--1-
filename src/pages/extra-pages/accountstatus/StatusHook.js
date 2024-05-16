@@ -7,7 +7,8 @@ const StatusHook = () => {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
   const [openPreview, setOpenPreview] = useState(false);
-
+  const [idBanUserid,setIdbanUserid] =useState("")
+  const [idBanReason,setIdBanReason] =useState("")
   const fetchData = async () => {
       try {
           let req = await fetch(`${baseURLProd}IDBanUnBanUserDetails`, {
@@ -37,45 +38,52 @@ const StatusHook = () => {
 }, [search])
 
 //-----------request Approve ---------------//
-const handleApprove = async ({agencyCode,userId}) => {
+const handleIdBan = async () => {
   try {
-    await fetch(`${baseURLProd}HostRequestApprove`, {
+    await fetch(`${baseURLProd}IdBan`, {
       method: 'POST',
-      body: JSON.stringify({ agencyCode: agencyCode, userId:userId }),
+      body: JSON.stringify({ userID: idBanUserid, idBanReason:idBanReason }),
       headers: {
         'Content-Type': 'application/json'
       }
     });
-    const rowIndex = data.findIndex(item => item.agencyCode === agencyCode);
+    if (window.confirm("Are you sure to Ban this Id ?")) {
+    const rowIndex = data.findIndex(item => item.userId === idBanUserid);
     if (rowIndex !== -1) {
       const updatedData = [...data];
-      updatedData[rowIndex].status = 'Approved';
-      toast.success("Request Approved successfully")
+      updatedData[rowIndex].status = 'False';
+      toast.success("Id Banned successfully")
       setData(updatedData);
       setFilter(updatedData)
+      fetchData();
+      handleClosePreview()
     }
+  }
   } catch (error) {
     console.error('Error approving request:', error);
   }
 };
 // -----------------request Reject--------------//
-const handleReject = async ({agencyCode,userId}) => {
+const handleIdUnban = async (userId) => {
   try {
-    await fetch(`${baseURLProd}HostRequestReject`, {
+    await fetch(`${baseURLProd}IdUnBan`, {
       method: 'POST',
-      body: JSON.stringify({ agencyCode:agencyCode, userId:userId }),
+      body: JSON.stringify({ userID:userId }),
       headers: {
         'Content-Type': 'application/json'
       }
     });
-    const rowIndex = data.findIndex(item => item.agencyCode === agencyCode);
+    if (window.confirm("Are you sure to Unban this Id?")) {
+    const rowIndex = data.findIndex(item => item.userId === userId);
     if (rowIndex !== -1) {
       const updatedData = [...data];
-      updatedData[rowIndex].status = 'Reject';
-      toast.success("Request Rejected successfully")
+      updatedData[rowIndex].status = 'True';
+      toast.success("Id UnBanned successfully")
       setData(updatedData);
       setFilter(updatedData)
+      fetchData();
     }
+  }
   } catch (error) {
     console.error('Error rejecting request:', error);
   }
@@ -84,7 +92,7 @@ const handleClosePreview = () => {
   setOpenPreview(false);
 };
 const handlePopup = (userId) => {
-  console.log(userId)
+  setIdbanUserid(userId)
   setOpenPreview(true);
 };
 //----------download csv---------------------//
@@ -106,8 +114,8 @@ const downloadCSV = () => {
 };
 
   return {
-    filter,search,setSearch,handleApprove,handlePopup,
-    handleReject,downloadCSV,openPreview,handleClosePreview
+    filter,search,setSearch,handleIdBan,handlePopup,
+    handleIdUnban,downloadCSV,openPreview,handleClosePreview,idBanReason,setIdBanReason
 }
 }
 

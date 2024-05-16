@@ -1,7 +1,7 @@
 
 import { baseURLProd } from "api/api";
 import { useEffect, useState } from "react";
-
+import { toast } from 'react-toastify';
 
 const FruitSlotHook = () => {
     const [data, setData] = useState([]);
@@ -53,8 +53,34 @@ const FruitSlotHook = () => {
         document.body.appendChild(link);
         link.click();
       };
+        // //---------------game enable disable button -------------//
+  const handleGameBtn = async () => {
+
+    try {
+     await fetch(`${baseURLProd}Fruitslot_Visibility`, {
+        method: 'POST',
+        body: JSON.stringify({ gameStatus: selectgame }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if(selectgame == '1'){
+        toast.success("Game Enabled Succesfully")
+      }
+      else{
+        toast.warning("Game disabled Succesfully")
+        setTimeout(() => {
+          setSelectGame("")
+        }, 3000);
+      }
+      // fetchData();
+    }
+    catch (error) {
+      console.error('error', error);
+    }
+  }
   return {
-    filter, search, setSearch,downloadCSV,selectgame,setSelectGame
+    filter, search, setSearch,downloadCSV,selectgame,setSelectGame,handleGameBtn
   }
 }
 

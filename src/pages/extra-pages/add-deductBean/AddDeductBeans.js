@@ -1,13 +1,12 @@
 import MainCard from 'components/MainCard';
-import { Grid,IconButton} from '@mui/material';
+import { Grid, IconButton } from '@mui/material';
 import DataTable from 'react-data-table-component';
-// import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import AddDeductBeanHook from './addDeductbeanHook';
 const UpdateBeans = () => {
-  const { filter, search, setSearch } = AddDeductBeanHook()
-    
+  const { filter, search, setSearch, selectedFiles, handleFileChange, handleUpload } = AddDeductBeanHook()
+  console.log(selectedFiles)
   const column = [
     {
       name: "User Id",
@@ -25,12 +24,12 @@ const UpdateBeans = () => {
       name: "Image",
       cell: row => (
         <>
-          <IconButton 
-          // onClick={() => handleImageClick(row.image)}
-           className='imgPreviewDiv'>
+          <IconButton
+            // onClick={() => handleImageClick(row.image)}
+            className='imgPreviewDiv'>
             <img height={70} width={80} src={row.image} alt='no-img' />
           </IconButton>
-         
+
         </>
       ),
       width: '180px'
@@ -51,7 +50,7 @@ const UpdateBeans = () => {
       cell: row => <div className="custom-cell">{row.dateTime}</div>,
       // width: '160px'
     }
-  
+
   ]
   const tableHeaderStyle = {
     headCells: {
@@ -92,11 +91,20 @@ const UpdateBeans = () => {
                   <div className='d-flex'>
                     <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon/></div>
+                    <div className='searchIcon'><SearchOutlinedIcon /></div>
                   </div>
-                  {/* <div>
-                    <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
-                  </div> */}
+                  <div>
+                    <input type="file" multiple onChange={handleFileChange} />
+                    <button onClick={handleUpload} className='btn btn-primary me-4'
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}>Upload Files</button>
+                    {/* <div>
+                      <ul>
+                        {Array.from(selectedFiles).map((file, index) => (
+                          <li key={index}>{file.name}</li>
+                        ))}
+                      </ul>
+                    </div> */}
+                  </div>
                 </div>
               </>
             }

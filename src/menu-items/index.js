@@ -25,7 +25,6 @@ const menuItems = {
     streamingDetail,resellerDetails,updateCoins,updateBeans,
     updateFrame,updateRides,VideoRecord,addDesignation,
     assignrole,games,withdrawRecord,reports, userReportfeedback,endUserStream
-    // , pages
   ]
 };
 

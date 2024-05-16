@@ -166,7 +166,7 @@ const HostRequest = () => {
                 </div>
                 <div>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
-                  </div>
+                </div>
               </div>
               </>
             }
@@ -191,7 +191,6 @@ const HostRequest = () => {
           value={userId}
           className='editInputField'
           onChange={(e)=>setUserId(e.target.value)}
-          // style={{ display: 'none' }} // Hidden field
         />
         <TextField
           margin="dense"

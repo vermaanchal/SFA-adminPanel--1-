@@ -46,6 +46,7 @@ const DeviceIdBlockUnblockHook = () => {
           'Content-Type': 'application/json'
         }
       });
+      if (window.confirm("Are you sure to Block this Id?")) {
       const rowIndex = data.findIndex(item => item.deviceId === deviceId && item.userId === userId);
       if (rowIndex !== -1) {
         const updatedData = [...data];
@@ -55,6 +56,7 @@ const DeviceIdBlockUnblockHook = () => {
         setFilter(updatedData);
       }
       fetchData()
+    }
     } catch (error) {
       console.error('Error approving request:', error);
     }
@@ -70,6 +72,7 @@ const DeviceIdBlockUnblockHook = () => {
           'Content-Type': 'application/json'
         }
       });
+      if (window.confirm("Are you sure to Unblock this Id?")) {
       const rowIndex = data.findIndex(item => item.deviceId === deviceId);
       if (rowIndex !== -1) {
         const updatedData = [...data];
@@ -79,7 +82,7 @@ const DeviceIdBlockUnblockHook = () => {
         setFilter(updatedData)
       }
       fetchData()
-    } catch (error) {
+    } }catch (error) {
       console.error('Error rejecting request:', error);
     }
   };

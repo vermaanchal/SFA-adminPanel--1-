@@ -163,11 +163,10 @@ const HostInsideAgency = () => {
       }
     }
   }
-  // const filteredColumns = column.filter(col => col.name !== 'Action'); 
 
-  // const handleBack=()=>{
-  //   window.location.assign(`/AdminAgencyHost`)
-  // }
+  const handleBack=()=>{
+    window.location.assign('/AdminAgencyHost')
+  }
   return (
 
     <MainCard title="Admin/Agency/Host">
@@ -175,7 +174,7 @@ const HostInsideAgency = () => {
         <Grid >
           <ToastContainer />
         </Grid>
-        {/* <div><button className='btn btn-primary mb-3'   style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div> */}
+        <div><button className='btn btn-primary mb-3'   style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div>
         <div className='text-end'>
           {filter ?
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'

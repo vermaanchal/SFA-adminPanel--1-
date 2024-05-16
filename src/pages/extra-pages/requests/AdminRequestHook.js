@@ -46,19 +46,21 @@ const AdminRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      const rowIndex = data.findIndex(item => item.adminid === adminId);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'Approved';
-        toast.success("Request Approved successfully");
-        setData(updatedData);
-  
-        // Update filteredData if adminId exists in filteredData
-        const filteredRowIndex = filter.findIndex(item => item.adminid === adminId);
-        if (filteredRowIndex !== -1) {
-          const updatedFilteredData = [...filter];
-          updatedFilteredData[filteredRowIndex].status = 'Approved';
-          setFilter(updatedFilteredData);
+      if (window.confirm("Are you sure to approve the request?")) {
+        const rowIndex = data.findIndex(item => item.adminid === adminId);
+        if (rowIndex !== -1) {
+          const updatedData = [...data];
+          updatedData[rowIndex].status = 'Approved';
+          toast.success("Request Approved successfully");
+          setData(updatedData);
+
+          // Update filteredData if adminId exists in filteredData
+          const filteredRowIndex = filter.findIndex(item => item.adminid === adminId);
+          if (filteredRowIndex !== -1) {
+            const updatedFilteredData = [...filter];
+            updatedFilteredData[filteredRowIndex].status = 'Approved';
+            setFilter(updatedFilteredData);
+          }
         }
       }
     } catch (error) {
@@ -75,40 +77,43 @@ const AdminRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      const rowIndex = data.findIndex(item => item.adminid === adminId);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'Reject';
-        toast.success("Request Rejected successfully");
-        setData(updatedData);
-  
-        // Update filteredData if adminId exists in filteredData
-        const filteredRowIndex = filter.findIndex(item => item.adminid === adminId);
-        if (filteredRowIndex !== -1) {
-          const updatedFilteredData = [...filter];
-          updatedFilteredData[filteredRowIndex].status = 'Reject';
-          setFilter(updatedFilteredData);
+      if (window.confirm("Are you sure to Reject the Request ?")) {
+        const rowIndex = data.findIndex(item => item.adminid === adminId);
+        if (rowIndex !== -1) {
+          const updatedData = [...data];
+          updatedData[rowIndex].status = 'Reject';
+          toast.success("Request Rejected successfully");
+          setData(updatedData);
+
+          // Update filteredData if adminId exists in filteredData
+          const filteredRowIndex = filter.findIndex(item => item.adminid === adminId);
+          if (filteredRowIndex !== -1) {
+            const updatedFilteredData = [...filter];
+            updatedFilteredData[filteredRowIndex].status = 'Reject';
+            setFilter(updatedFilteredData);
+          }
         }
       }
+
     } catch (error) {
       console.error('Error rejecting request:', error);
     }
   };
-  
+
   const handleDownload = () => {
     // console.log(imageUrl,imageName,'url & name ')
-    const img ='https://cdn.dummyjson.com/product-images/10/2.jpg'
+    const img = 'https://cdn.dummyjson.com/product-images/10/2.jpg'
     fetch(img)
-        .then(response => response.blob())
-        .then(blob => {
-            const link = document.createElement('a');
-            const objectURL = URL.createObjectURL(blob);
-            link.href = objectURL;
-            link.download = 'image.png';
-            link.click();
-            URL.revokeObjectURL(objectURL);
-        })
-        .catch(error => console.error('Error downloading image:', error));
+      .then(response => response.blob())
+      .then(blob => {
+        const link = document.createElement('a');
+        const objectURL = URL.createObjectURL(blob);
+        link.href = objectURL;
+        link.download = 'image.png';
+        link.click();
+        URL.revokeObjectURL(objectURL);
+      })
+      .catch(error => console.error('Error downloading image:', error));
   };
 
   // const downloadImage = (imageUrl, imageName) => {

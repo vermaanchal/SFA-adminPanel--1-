@@ -17,23 +17,18 @@ const CreateReseller = () => {
 
     {
       name: "User Id",
-      // selector: id,
       cell: row => <div className="custom-cell">{row.userId}</div>,
-      // width: '100px'
     },
     {
       name: " Name",
-      // selector: id,
       cell: row => <div className="custom-cell">{row.name}</div>,
       width: '250px'
     }, {
       name: "Mobile",
-      // selector: id,
       cell: row => <div className="custom-cell">{row.mobile}</div>,
       width: '270px'
     }, {
       name: "Email",
-      // selector: id,
       cell: row => <div className="custom-cell">{row.email}</div>,
       width: '270px'
     },
@@ -62,8 +57,8 @@ const CreateReseller = () => {
         return (
           <>
             <button
-              className='btn btn-primary me-4'
               onClick={()=>handleSubmit()}
+              className='btn btn-primary me-4'
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
               Create

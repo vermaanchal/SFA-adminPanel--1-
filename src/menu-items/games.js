@@ -40,7 +40,7 @@ const games = {
     },
     {
         id: '777',
-        title: '777',
+        title: '777 Game',
         type: 'item',
         url: '/TrippleSeven_Game',
         icon: icons.CasinoOutlinedIcon,

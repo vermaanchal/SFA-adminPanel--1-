@@ -1,12 +1,13 @@
 import MainCard from 'components/MainCard';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, FormControl, InputLabel, Select, MenuItem  } from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import ReceivingReportHook from './ReceivingReportHook';
 const ReceivingReport = () => {
-  const { filter, search, setSearch, downloadCSV, handleFilter, fromDate, toDate, setFromDate, setToDate } = ReceivingReportHook()
+  const { filter, search, setSearch, downloadCSV, handleFilter, fromDate, toDate, setFromDate, setToDate,
+    handleAdminRecieving,handleAgencyRecieving} = ReceivingReportHook()
 
   const column = [
     {
@@ -105,6 +106,23 @@ const ReceivingReport = () => {
                   <button className='btn btn-primary'
                     style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleFilter}>Search</button>
                 </div>
+                <div>
+                  <FormControl className='designationForm'>
+                    <InputLabel id="select-label">Host</InputLabel>
+                    <Select
+                      labelId="select-label"
+                      label='Select Role'
+                      id="select"
+                      // value={selectgame}
+                      // onChange={(e) => setSelectGame(e.target.value)}
+                      className='selectDiv'
+                    >
+                      {/* <MenuItem value="host" >Host</MenuItem> */}
+                      <MenuItem value="admin" onClick={handleAdminRecieving}>Admin</MenuItem>
+                      <MenuItem value="agency" onClick={handleAgencyRecieving}>Agency</MenuItem>
+                    </Select>
+                  </FormControl>
+                  </div>
               </>
             }
           />

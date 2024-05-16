@@ -95,15 +95,17 @@ const Hook = () => {
             }
 
             await response.json();
-            fetchData()
-            setOpen(false);
-            setUserId("")
-            setName("")
-            setMobile("")
-            setEmail("")
-            setPassword("")
-            setDob("")
-            toast.success("user details changed ")
+            if (window.confirm('Are you sure you want to change the details?')) {
+                fetchData()
+                setOpen(false);
+                setUserId("")
+                setName("")
+                setMobile("")
+                setEmail("")
+                setPassword("")
+                setDob("")
+                toast.success("user details changed ")
+              }
         } catch (error) {
             console.log(error.message);
         }

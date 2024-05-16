@@ -6,7 +6,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import FruitSlotHook from './fruitSlotHook';
 const FruitSlot = () => {
-  const { filter, search, setSearch,downloadCSV ,selectgame,setSelectGame} = FruitSlotHook()
+  const { filter, search, setSearch,downloadCSV ,selectgame,setSelectGame,handleGameBtn} = FruitSlotHook()
     
   const column = [
     {
@@ -99,13 +99,14 @@ const FruitSlot = () => {
                       onChange={(e) => setSelectGame(e.target.value)}
                       className='selectDiv'
                     >
-                      <MenuItem value="01">Enable</MenuItem>
-                      <MenuItem value="02">Disable</MenuItem>
+                      <MenuItem value="1">Enable</MenuItem>
+                      <MenuItem value="0">Disable</MenuItem>
                     </Select>
                   </FormControl>
                     <button  className='btn btn-primary ms-2 p-2' 
                     style={{ backgroundColor: '#EF9848', border: '0px' }}
-                    >Start</button>
+                    onClick={handleGameBtn}
+                    >Submit</button>
                   </div>
                   <div>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>

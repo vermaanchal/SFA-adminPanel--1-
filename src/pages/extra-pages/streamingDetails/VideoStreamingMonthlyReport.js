@@ -27,8 +27,8 @@ const VideoStreamingMonthlyReport = () => {
             });
 
             const res = await req.json();
-            setData(res.monthlyUserStreamingList);
-            setFilter(res.monthlyUserStreamingList)
+            setData(res.monthlyUserAudioStreamingList);
+            setFilter(res.monthlyUserAudioStreamingList)
 
         } catch (error) {
             console.log(error);
@@ -68,8 +68,8 @@ const VideoStreamingMonthlyReport = () => {
         const csvContent =
             "data:text/csv;charset=utf-8," +
             [
-                Object.keys(filter[0]).join(','), // Header row
-                ...filter.map((row) => Object.values(row).join(',')), // Data rows
+                Object.keys(filter[0]).join(','),
+                ...filter.map((row) => Object.values(row).join(',')),
             ].join('\n');
 
         const encodedUri = encodeURI(csvContent);

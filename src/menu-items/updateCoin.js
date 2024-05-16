@@ -16,7 +16,7 @@ const updateCoins = {
   children: [
     {
       id: 'add-deduct-coins',
-      title: 'Add/Deduct Coins',
+      title: 'Add/Deduct Coins ',
       type: 'item',
       url: '/UpdateUserCoin',
       icon: icons.PriceChangeOutlinedIcon,

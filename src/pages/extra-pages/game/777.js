@@ -7,7 +7,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import TripleSevenHook from './777Hook';
 const TripleSeven = () => {
-  const { filter, search, setSearch, downloadCSV,setSelectGame,selectgame } = TripleSevenHook()
+  const { filter, search, setSearch, downloadCSV,setSelectGame,selectgame,handleGameBtn } = TripleSevenHook()
 
   const column = [
     {
@@ -100,13 +100,14 @@ const TripleSeven = () => {
                       onChange={(e) => setSelectGame(e.target.value)}
                       className='selectDiv'
                     >
-                      <MenuItem value="01">Enable</MenuItem>
-                      <MenuItem value="02">Disable</MenuItem>
+                      <MenuItem value="1">Enable</MenuItem>
+                      <MenuItem value="0">Disable</MenuItem>
                     </Select>
                   </FormControl>
                     <button  className='btn btn-primary ms-2 p-2' 
                     style={{ backgroundColor: '#EF9848', border: '0px' }}
-                    >Start</button>
+                    onClick={handleGameBtn}
+                    >Submit</button>
                   </div>
                   <div>
                     <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>

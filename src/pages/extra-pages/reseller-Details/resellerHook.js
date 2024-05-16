@@ -37,13 +37,14 @@ const ResellerHook = () => {
   }, [search])
 
   //----------------download CSV file-----------------//
+
   const downloadCSV = () => {
     // Format the data for CSV
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        Object.keys(filter[0]).join(','), // Header row
-        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+        Object.keys(filter[0]).join(','),
+        ...filter.map((row) => Object.values(row).join(',')),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -54,7 +55,7 @@ const ResellerHook = () => {
     link.click();
   };
 
- //-------------select value--------------------
+  //-------------select value--------------------
   const handleSelectChange = (e, userId) => {
     const { value } = e.target;
     const newData = filter.map(item => {
@@ -68,10 +69,9 @@ const ResellerHook = () => {
 
   // //---------------create Reseller-------------//
   const handleSubmit = async () => {
-
     try {
       for (const row of filter) {
-        if (row.resellerTypeId ) {
+        if (row.resellerTypeId) {
           await fetch(`${baseURLProd}CreateReseller`, {
             method: 'POST',
             body: JSON.stringify({ resellerTypeId: row.resellerTypeId, userId: row.userId }),
@@ -81,8 +81,8 @@ const ResellerHook = () => {
           });
         }
       }
-     toast.success("Reseller created Succesfully")
-     fetchData();
+      toast.success("Reseller created Succesfully")
+      fetchData();
     }
     catch (error) {
       console.error('error', error);

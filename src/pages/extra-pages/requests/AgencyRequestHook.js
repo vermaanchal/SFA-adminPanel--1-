@@ -55,6 +55,7 @@ const handleApprove = async (agencyCode,userId) => {
         'Content-Type': 'application/json'
       }
     });
+    if (window.confirm("Are you sure to approve the request?")) {
     const rowIndex = data.findIndex(item => item.userId === userId && item.agencyCode === agencyCode);
     if (rowIndex !== -1) {
       const updatedData = [...data];
@@ -63,6 +64,7 @@ const handleApprove = async (agencyCode,userId) => {
       setData(updatedData);
       setFilter(updatedData)
     }
+  }
   } catch (error) {
     console.error('Error approving request:', error);
   }
@@ -77,6 +79,7 @@ const handleReject = async (agencyCode,userId) => {
         'Content-Type': 'application/json'
       }
     });
+    if (window.confirm("Are you sure to Reject the request?")) {
     const rowIndex = data.findIndex(item => item.userId === userId);
     if (rowIndex !== -1) {
       const updatedData = [...data];
@@ -85,6 +88,7 @@ const handleReject = async (agencyCode,userId) => {
       setData(updatedData);
       setFilter(updatedData)
     }
+  }
   } catch (error) {
     console.error('Error rejecting request:', error);
   }
@@ -155,7 +159,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-      const response = await fetch(`${baseURLProd}UserEditDetails`, {
+      const response = await fetch(`${baseURLProd}EditAgencyrequest`, {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -163,11 +167,11 @@ const handleSubmit = async (e) => {
           body: JSON.stringify({
               userId: userId,
               agencyName: agencyName,
-              userName:agencyName,
+              yourName:agencyName,
               agencyLocation:agencyLocation,
-              agencyContact:agencyContact,
+              agencyContacts:agencyContact,
               agencyEmail:agencyEmail,
-              hostYouHave:hostYouHave,
+              hostsYouhave:hostYouHave,
               agencyCode:agencyCode,
               adminId:adminId
           }),
@@ -178,6 +182,8 @@ const handleSubmit = async (e) => {
       }
 
       await response.json();
+    if (window.confirm("Are you sure to Change the agency details?")) {
+
       fetchData()
       setOpen(false);
       setUserId("")
@@ -190,7 +196,8 @@ const handleSubmit = async (e) => {
       setAgencyCode("")
       setAdminId("")
 
-      toast.success("user details changed ")
+      toast.success("Agency details changed ")
+    }
   } catch (error) {
       console.log(error.message);
   }
