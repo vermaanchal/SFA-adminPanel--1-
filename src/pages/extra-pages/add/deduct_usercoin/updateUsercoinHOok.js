@@ -29,12 +29,20 @@ const UpdateUsercoinHook = () => {
         fetchData();
       }, []);
 
-      useEffect(() => {
-        const result = data.filter((item) => {
-          return item.userId.toLowerCase().match(search.toLocaleLowerCase())
-        })
-        setFilter(result)
-      }, [search])
+      //--------------------filter------------------//
+  useEffect(() => {
+    if (search) {
+      const result = data.filter((item, index, self) =>
+        index === self.findIndex(t => t.userId.toLowerCase() === item.userId.toLowerCase())
+      ).filter((item) => 
+        item.userId.toLowerCase().includes(search.toLowerCase())
+      );
+
+      setFilter(result);
+    } else {
+      setFilter(data);
+    }
+  }, [search, data]);
 
       const downloadCSV = () => {
         // Format the data for CSV
@@ -52,8 +60,64 @@ const UpdateUsercoinHook = () => {
         document.body.appendChild(link);
         link.click();
       };
+
+       //-------------select value--------------------
+ const handleChange = (e, userId) => {
+  const { value } = e.target;
+  const newData = { ...filter };
+  if (newData.userId === userId) {
+    newData.amount = value;
+  }
+  setFilter(newData);
+};
+
+ //---------------add beans-------------//
+ const handleSubmit = async () => {
+  try {
+    for (const row of filter) {
+      if (row.userId && row.amount) {
+        await fetch(`${baseURLProd}AddBean`, {
+          method: 'POST',
+          body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    }
+    if (window.confirm("Are you sure to add beans")) {
+    toast.success("Beans Added successfully");
+    fetchData();
+    }
+  } catch (error) {
+    console.error('Error adding beans coins:', error);
+  }
+}
+
+ //---------------add beans-------------//
+ const handleDeductCoin = async () => {
+  try {
+    for (const row of filter) {
+      if (row.userId && row.amount) {
+        await fetch(`${baseURLProd}DeductBean`, {
+          method: 'POST',
+          body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    }
+    if (window.confirm("Are you sure to deduct beans")) {
+    toast.success("Beans deducted successfully");
+    fetchData();
+    }
+  } catch (error) {
+    console.error('Error adding beans coins:', error);
+  }
+}
   return {
-    filter, search, setSearch,downloadCSV
+    filter, search, setSearch,downloadCSV,handleChange,handleSubmit,handleDeductCoin
   }
 }
 

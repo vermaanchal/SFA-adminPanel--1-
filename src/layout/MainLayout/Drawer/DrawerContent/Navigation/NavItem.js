@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 // material-ui
-import { useTheme } from '@mui/material/styles';
+// import { useTheme } from '@mui/material/styles';
 import { Avatar, Chip, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
 // project import
@@ -13,7 +13,7 @@ import { activeItem } from 'store/reducers/menu';
 // ==============================|| NAVIGATION - LIST ITEM ||============================== //
 
 const NavItem = ({ item, level }) => {
-  const theme = useTheme();
+  // const theme = useTheme();
   const dispatch = useDispatch();
   const { pathname } = useLocation();
 
@@ -46,7 +46,9 @@ const NavItem = ({ item, level }) => {
   }, [pathname]);
 
   const textColor = 'text.primary';
-  const iconSelectedColor = 'primary.main';
+  // const iconSelectedColor = 'primary.main';
+  const iconSelectedColor = 'text.primary';
+
 
   return (
     <ListItemButton
@@ -60,27 +62,36 @@ const NavItem = ({ item, level }) => {
         py: !drawerOpen && level === 1 ? 1.25 : 1,
         ...(drawerOpen && {
           '&:hover': {
-            bgcolor: 'primary.lighter'
+            // bgcolor: 'primary.lighter',
+            bgcolor: '#ffedde'
           },
           '&.Mui-selected': {
-            bgcolor: 'primary.lighter',
-            borderRight: `2px solid ${theme.palette.primary.main}`,
+            // bgcolor: 'primary.lighter',
+            bgcolor: '#ffedde',
+            // borderRight: `2px solid ${theme.palette.primary.main}`,
             color: iconSelectedColor,
             '&:hover': {
               color: iconSelectedColor,
-              bgcolor: 'primary.lighter'
+              // bgcolor: 'primary.lighter',
+              bgcolor: '#ffedde'
             }
           }
         }),
         ...(!drawerOpen && {
           '&:hover': {
-            bgcolor: 'transparent'
+            // bgcolor: 'transparent',
+            bgcolor: '#ffedde'
+
           },
           '&.Mui-selected': {
             '&:hover': {
-              bgcolor: 'transparent'
+              // bgcolor: 'transparent',
+              bgcolor: '#ffedde'
+
             },
-            bgcolor: 'transparent'
+            // bgcolor: 'transparent',
+            bgcolor: '#ffedde'
+
           }
         })
       }}

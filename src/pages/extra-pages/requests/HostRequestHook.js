@@ -158,7 +158,7 @@ const HostRequestHook = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${baseURLProd}UserEditDetails`, {
+      const response = await fetch(`${baseURLProd}EditHostrequest`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -188,7 +188,7 @@ const HostRequestHook = () => {
         setType("")
         setAgencyCode("")
         setHostCode("")
-        toast.success("user details changed ")
+        toast.success("Host details changed ")
       }
     } catch (error) {
       console.log(error.message);

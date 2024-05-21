@@ -8,9 +8,9 @@ import { ToastContainer } from 'react-toastify';
 import UpdateUsercoinHook from './updateUsercoinHOok';
 import demoImage from '../../../../assets/images/users/sfaLogo.png'
 const UpdateUserCoin = () => {
-  const { filter, search, setSearch } = UpdateUsercoinHook()
+  const { filter, search, setSearch,handleChange,handleSubmit,handleDeductCoin } = UpdateUsercoinHook()
     
-  const column = [
+  const defaultColumns = [
     {
       name: "User Id",
       // selector: id,
@@ -60,6 +60,84 @@ const UpdateUserCoin = () => {
     }
   
   ]
+  const searchColumns = [
+    {
+      name: "User Id",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.userId}</div>,
+      // width: '100px'
+    },
+    {
+      name: " Name",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.name}</div>,
+      // width: '150px'
+    },
+    {
+      name: "Image",
+      cell: row => (
+        <>
+          <IconButton
+            // onClick={() => handleImageClick(row.image)}
+            className='imgPreviewDiv'>
+            <img height={70} width={80} src={row.image} alt='no-img' />
+          </IconButton>
+
+        </>
+      ),
+      // width: '180px'
+    },
+    {
+      name: "Available Coins",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.availableBeans}</div>,
+      // width: '160px'
+    }
+    ,
+    {
+      name: "Amount",
+      // selector: id,
+      cell: (row) =>{
+        const userId =row.userId
+        const amount =row.amount
+        return(
+          <>
+          <div className="custom-cell">
+            <input type='number' className='form-control p-2' value={amount} placeholder='Enter Bean Value' onChange={e => handleChange(e, userId)}></input>
+          </div>
+          </>
+        )
+      },
+      
+    }
+    ,
+    {
+      name: 'Action',
+      cell: () => {
+        return (
+          <>
+            <button
+              className='btn btn-primary me-2'
+              onClick={handleSubmit}
+              style={{ backgroundColor: '#EF9848', border: '0px' }}
+            >
+              Add
+            </button>
+            <button
+              className='btn btn-primary me-2'
+              onClick={handleDeductCoin}
+              style={{ backgroundColor: '#EF9848', border: '0px' }}
+            >
+              Deduct
+            </button>
+          </>
+        );
+      },
+      width: '210px'
+
+    }
+
+  ]
   const tableHeaderStyle = {
     headCells: {
       style: {
@@ -90,7 +168,7 @@ const UpdateUserCoin = () => {
           <ToastContainer />
         </Grid>
         <div className='text-end'>
-          <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
+          <DataTable columns={search ? searchColumns : defaultColumns} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
             subHeader
             subHeaderComponent={

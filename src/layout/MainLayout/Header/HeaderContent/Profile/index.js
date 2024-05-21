@@ -14,7 +14,7 @@ import {
   Paper,
   Popper,
   Stack,
-  Typography
+  Typography, Dialog, DialogTitle, DialogContent, TextField, DialogActions, Button
 } from '@mui/material';
 
 // project import
@@ -25,6 +25,8 @@ import Transitions from 'components/@extended/Transitions';
 import avatar1 from 'assets/images/users/demo.jpg';
 import { LogoutOutlined } from '@ant-design/icons';
 import SyncLockOutlinedIcon from '@mui/icons-material/SyncLockOutlined';
+import { baseURLProd } from 'api/api';
+import { toast, ToastContainer } from 'react-toastify';
 // tab panel wrapper
 function TabPanel({ children, value, index, ...other }) {
   return (
@@ -47,12 +49,19 @@ const Profile = () => {
   const theme = useTheme();
 
   const handleLogout = async () => {
-      window.location.assign('/')
+    window.location.assign('/')
   };
-  const handleChangePassword = async () => {
-    window.location.assign('/changepassword')
-};
+  const [passwordopen, setpasswordOpen] = useState(false)
 
+  const handleChangePassword = async () => {
+    // window.location.assign('/changepassword')
+    setpasswordOpen(true)
+
+  };
+
+  const handlepasswordclose = () => {
+    setpasswordOpen(false)
+  }
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleToggle = () => {
@@ -65,7 +74,28 @@ const Profile = () => {
     }
     setOpen(false);
   };
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
 
+  const handleSubmit = async () => {
+    const req = await fetch(`${baseURLProd}ChangePassword`, {
+      method: 'POST',
+      body: JSON.stringify({
+        adminId: '123456', currentPassword: currentPassword
+        , newPassword: newPassword
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    const res = await req.json();
+    if (res.status == true) {
+      setCurrentPassword("")
+      setNewPassword("")
+      setpasswordOpen(false)
+      toast.success("password changed successfully")
+    }
+  }
 
 
   const iconBackColorOpen = 'grey.300';
@@ -129,7 +159,7 @@ const Profile = () => {
                         <Grid item>
                           <Stack direction="row" spacing={1.25} alignItems="center">
                             <Avatar alt="profile user" src={avatar1} sx={{ width: 32, height: 32 }} />
-                            
+
                             <Stack>
                               <Typography variant="h6">Admin</Typography>
                               {/* <Typography variant="body2" color="textSecondary">
@@ -145,13 +175,51 @@ const Profile = () => {
                         </Grid>
                       </Grid>
                       <Grid container justifyContent="space-between" alignItems="center">
-                      <Grid item>
-                      <Typography variant="h6">Change Password</Typography>
+                        <Grid item>
+                          <Typography variant="h6">Change Password</Typography>
                         </Grid>
                         <Grid item>
                           <IconButton size="large" color="secondary" onClick={handleChangePassword}>
                             <SyncLockOutlinedIcon />
                           </IconButton>
+                          <Dialog open={passwordopen} onClose={handlepasswordclose}>
+                            <DialogTitle className='editTitle'>Change Password</DialogTitle>
+                            <DialogContent>
+                              <ToastContainer />
+                              <Grid className='changepassinnerdiv my-4 '>
+                                <Grid item >
+                                  <TextField
+                                    margin="dense"
+                                    label="Current Password"
+                                    type="text"
+                                    name="currentPassword"
+                                    fullWidth
+                                    value={currentPassword}
+                                    onChange={(e) => setCurrentPassword(e.target.value)}
+                                    className='editInputField'
+                                  />
+                                  <TextField
+                                    margin="dense"
+                                    label="New Password"
+                                    type="text"
+                                    name="newPassword"
+                                    fullWidth
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    className='editInputField'
+                                  />
+                                </Grid>
+                              </Grid >
+                            </DialogContent>
+                            <DialogActions className='editButtonDiv'>
+                              <Button onClick={handleClose} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+                                Cancel
+                              </Button>
+                              <Button onClick={handleSubmit} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+                                Submit
+                              </Button>
+                            </DialogActions>
+                          </Dialog>
                         </Grid>
                       </Grid>
                     </CardContent>

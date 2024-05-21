@@ -5,9 +5,8 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import AddDeductBeanHook from './addDeductbeanHook';
 const UpdateBeans = () => {
-  const { filter, search, setSearch, selectedFiles, handleFileChange, handleUpload } = AddDeductBeanHook()
-  console.log(selectedFiles)
-  const column = [
+  const { filter, search, setSearch, handleFileChange, handleUpload,handleChange,handleSubmit,handleDeductBean } = AddDeductBeanHook()
+  const defaultColumns = [
     {
       name: "User Id",
       // selector: id,
@@ -52,6 +51,85 @@ const UpdateBeans = () => {
     }
 
   ]
+
+  const searchColumns = [
+    {
+      name: "User Id",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.userId}</div>,
+      // width: '100px'
+    },
+    {
+      name: " Name",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.name}</div>,
+      // width: '150px'
+    },
+    {
+      name: "Image",
+      cell: row => (
+        <>
+          <IconButton
+            // onClick={() => handleImageClick(row.image)}
+            className='imgPreviewDiv'>
+            <img height={70} width={80} src={row.image} alt='no-img' />
+          </IconButton>
+
+        </>
+      ),
+      // width: '180px'
+    },
+    {
+      name: "Available Beans",
+      // selector: id,
+      cell: row => <div className="custom-cell">{row.amount}</div>,
+      // width: '160px'
+    }
+    ,
+    {
+      name: "Amount",
+      // selector: id,
+      cell: (row) =>{
+        const userId =row.userId
+        const amount =row.amount
+        return(
+          <>
+          <div className="custom-cell">
+            <input type='number' className='form-control p-2' value={amount} placeholder='Enter Bean Value' onChange={e => handleChange(e, userId)}></input>
+          </div>
+          </>
+        )
+      },
+      
+    }
+    ,
+    {
+      name: 'Action',
+      cell: () => {
+        return (
+          <>
+            <button
+              className='btn btn-primary me-2'
+              onClick={handleSubmit}
+              style={{ backgroundColor: '#EF9848', border: '0px' }}
+            >
+              Add
+            </button>
+            <button
+              className='btn btn-primary me-2'
+              onClick={handleDeductBean}
+              style={{ backgroundColor: '#EF9848', border: '0px' }}
+            >
+              Deduct
+            </button>
+          </>
+        );
+      },
+      width: '210px'
+
+    }
+
+  ]
   const tableHeaderStyle = {
     headCells: {
       style: {
@@ -82,7 +160,7 @@ const UpdateBeans = () => {
           <ToastContainer />
         </Grid>
         <div className='text-end'>
-          <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
+          <DataTable  columns={search ? searchColumns : defaultColumns} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
             subHeader
             subHeaderComponent={
@@ -97,13 +175,6 @@ const UpdateBeans = () => {
                     <input type="file" multiple onChange={handleFileChange} />
                     <button onClick={handleUpload} className='btn btn-primary me-4'
                     style={{ backgroundColor: '#EF9848', border: '0px' }}>Upload Files</button>
-                    {/* <div>
-                      <ul>
-                        {Array.from(selectedFiles).map((file, index) => (
-                          <li key={index}>{file.name}</li>
-                        ))}
-                      </ul>
-                    </div> */}
                   </div>
                 </div>
               </>
