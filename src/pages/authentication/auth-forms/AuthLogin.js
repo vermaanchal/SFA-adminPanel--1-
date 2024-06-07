@@ -4,32 +4,18 @@ import React from 'react';
 // material-ui
 import {
   Button,
-  // Checkbox,
-  // Divider,
-  // FormControlLabel,
   FormHelperText,
   Grid,
-  // Link,
   IconButton,
   InputAdornment,
   InputLabel,
   OutlinedInput,
   Stack,
-  // Typography
 } from '@mui/material';
-
-// third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-// import { toast } from 'react-toastify';
-// import { ToastContainer } from 'react-toastify';
-// project import
-// import FirebaseSocial from './FirebaseSocial';
-// import AnimateButton from 'components/@extended/AnimateButton';
-
-// assets
-// import loginBg from '../../../assets/images/users/loginBg.png'
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { baseURLProd } from 'api/api';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -46,7 +32,7 @@ const AuthLogin = () => {
 
   const handleLogin = async (values, setStatus, setSubmitting, setErrors) => {
     try {
-      const response = await fetch('http://stream4all01.techmates.org:5485/api/Registration/Login', {
+      const response = await fetch(`${baseURLProd}Login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 
 const DeviceIdBlockUnblockHook = () => {
   const [data, setData] = useState([]);
-//   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
 
   //---------------------fetch data---------------//
@@ -28,35 +27,42 @@ const DeviceIdBlockUnblockHook = () => {
   useEffect(() => {
     fetchData();
   }, []);
-//   //------------------------serach by userid-----------//
-//       useEffect(() => {
-//         const result = data.filter((item) => {
-//           return item.userId.toLowerCase().match(search.toLocaleLowerCase())
-//         })
-//         setFilter(result)
-//       }, [search])
-  
+  //   //------------------------serach by userid-----------//
+  //       useEffect(() => {
+  //         const result = data.filter((item) => {
+  //           return item.userId.toLowerCase().match(search.toLocaleLowerCase())
+  //         })
+  //         setFilter(result)
+  //       }, [search])
+
   //---------------Block-------------------//
   const handleBlock = async ({ deviceId, userId }) => {
     try {
-      await fetch(`${baseURLProd}UserDeviceIdBlock`, {
+      const req = await fetch(`${baseURLProd}UserDeviceIdBlock`, {
         method: 'POST',
         body: JSON.stringify({ deviceId: deviceId, userId: userId }),
         headers: {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to Block this Id?")) {
-      const rowIndex = data.findIndex(item => item.deviceId === deviceId && item.userId === userId);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'False';
-        toast.success("Id Blocked successfully")
-        setData(updatedData);
-        setFilter(updatedData);
+      const res = await req.json()
+      if (res.status == true) {
+
+        if (window.confirm("Are you sure to Block this Id?")) {
+          const rowIndex = data.findIndex(item => item.deviceId === deviceId && item.userId === userId);
+          if (rowIndex !== -1) {
+            const updatedData = [...data];
+            updatedData[rowIndex].status = 'False';
+            toast.success("Id blocked Successfully")
+            setData(updatedData);
+            setFilter(updatedData);
+          }
+          fetchData()
+        }
       }
-      fetchData()
-    }
+      else {
+        toast.error("device Id not found")
+      }
     } catch (error) {
       console.error('Error approving request:', error);
     }
@@ -73,16 +79,17 @@ const DeviceIdBlockUnblockHook = () => {
         }
       });
       if (window.confirm("Are you sure to Unblock this Id?")) {
-      const rowIndex = data.findIndex(item => item.deviceId === deviceId);
-      if (rowIndex !== -1) {
-        const updatedData = [...data];
-        updatedData[rowIndex].status = 'True';
-        toast.success("ID Unblocked successfully")
-        setData(updatedData);
-        setFilter(updatedData)
+        const rowIndex = data.findIndex(item => item.deviceId === deviceId);
+        if (rowIndex !== -1) {
+          const updatedData = [...data];
+          updatedData[rowIndex].status = 'True';
+          toast.success("ID Unblocked successfully")
+          setData(updatedData);
+          setFilter(updatedData)
+        }
+        fetchData()
       }
-      fetchData()
-    } }catch (error) {
+    } catch (error) {
       console.error('Error rejecting request:', error);
     }
   };

@@ -30,8 +30,8 @@ const UpdateUsercoinHook = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  
   //--------------------filter------------------//
-
   useEffect(() => {
     const fetchSearchResults = async () => {
       if (search) {
@@ -70,12 +70,13 @@ const UpdateUsercoinHook = () => {
     fetchSearchResults();
   }, [search, data]);
 
+//-----------------download CSV-------------//
   const downloadCSV = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
       [
-        Object.keys(filter[0]).join(','), // Header row
-        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+        Object.keys(filter[0]).join(','),
+        ...filter.map((row) => Object.values(row).join(',')),
       ].join('\n');
 
     const encodedUri = encodeURI(csvContent);
@@ -97,14 +98,7 @@ const UpdateUsercoinHook = () => {
     setFilter(newData);
     setNewSearchData(newData);
   };
-  //  const handleChange = (e, userId) => {
-  //   const { value } = e.target;
-  //   const newData = { ...filter };
-  //   if (newData.userId === userId) {
-  //     newData.amount = value;
-  //   }
-  //   setNewSearchData(newData);
-  // };
+
   //---------------add Coin-------------//
   const handleSubmit = async () => {
     try {
