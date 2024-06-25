@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify';
 import AddDeductBeanHook from './addDeductbeanHook';
 const UpdateBeans = () => {
   const { filter, search, setSearch, handleChange, handleSubmit, handleDeductBean,
-     newSearchData,handleFileChange,handleUpload } = AddDeductBeanHook()
+     newSearchData,handleFileChange,handleUpload,handleReset,data } = AddDeductBeanHook()
   const defaultColumns = [
     {
       name: "User Id",
@@ -81,7 +81,7 @@ const UpdateBeans = () => {
           </>
         )
       },
-
+      width:"230px"
     }
     ,
     {
@@ -132,6 +132,7 @@ const UpdateBeans = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -140,6 +141,9 @@ const UpdateBeans = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='d-flex justify-content-between'>
           <div className='d-flex'>
             <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
@@ -148,7 +152,7 @@ const UpdateBeans = () => {
               style={{ cursor: "pointer" }} /></div>
           </div>
           <div>
-            <input type="file" multiple onChange={handleFileChange} />
+            <input type="file" onChange={handleFileChange} />
             <button onClick={handleUpload} className='btn btn-primary me-4'
               style={{ backgroundColor: '#EF9848', border: '0px' }}>Upload Files</button>
           </div>

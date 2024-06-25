@@ -38,13 +38,24 @@ const Hook = () => {
     }, []);
 
     //------------------------serach by userid-----------//
-    useEffect(() => {
-        const result = data.filter((item) => {
-            return item.userId.toLowerCase().match(search.toLocaleLowerCase())
-        })
-        setFilter(result)
-    }, [search])
+    // useEffect(() => {
+    //     const result = data.filter((item) => {
+    //         return item.userId.toLowerCase().match(search.toLocaleLowerCase())
+    //     })
+    //     setFilter(result)
+    // }, [search])
 
+    const handleSearch = () => {
+        const result = data.filter((item) => {
+          return item.userId.toLowerCase().match(search.toLowerCase());
+        });
+        setFilter(result);
+      };
+    
+      const handleReset = () => {
+        setSearch('');
+        setFilter(data);
+      };
     //---------------------------delete user------------------//
     const handleDelete = async (userId) => {
         await fetch(`${baseURLProd}DeleteVideo`, {
@@ -75,6 +86,7 @@ const Hook = () => {
         e.preventDefault();
 
         try {
+            if (window.confirm('Are you sure you want to change the details?')) {
             const response = await fetch(`${baseURLProd}UserEditDetails`, {
                 method: 'POST',
                 headers: {
@@ -95,7 +107,6 @@ const Hook = () => {
             }
 
             await response.json();
-            if (window.confirm('Are you sure you want to change the details?')) {
                 fetchData()
                 setOpen(false);
                 setUserId("")
@@ -149,14 +160,14 @@ const Hook = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", "Appuser_details.csv");
         document.body.appendChild(link);
         link.click();
     };
 
     return {
-        filter, search, openPreview, previewImageUrl, setSearch, setOpenPreview, setPreviewImageUrl,
-        handleClosePreview, handleDelete, handleDownload, handleImageClick, handleEdit, handleSubmit, downloadCSV,
+        filter, search, openPreview, previewImageUrl, setSearch, setOpenPreview, setPreviewImageUrl,handleReset,handleSearch,
+        handleClosePreview, handleDelete, handleDownload, handleImageClick, handleEdit, handleSubmit, downloadCSV,data,
         open, handleClose, userId, name, dob, mobile, email, password, setUserId, setName, setDob, setMobile, setEmail, setPassword
     }
 }

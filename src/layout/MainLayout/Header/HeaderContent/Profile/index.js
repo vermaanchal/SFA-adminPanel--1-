@@ -68,15 +68,18 @@ const Profile = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
+ 
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
   const handleClose = (event) => {
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
     setOpen(false);
+    setCurrentPassword("")
+    setNewPassword("")
+    
   };
-  const [currentPassword, setCurrentPassword] = useState('')
-  const [newPassword, setNewPassword] = useState('')
-
   const handleSubmit = async () => {
     const req = await fetch(`${baseURLProd}ChangePassword`, {
       method: 'POST',
@@ -154,6 +157,7 @@ const Profile = () => {
               >
                 <ClickAwayListener onClickAway={handleClose}>
                   <MainCard elevation={0} border={false} content={false}>
+                  <ToastContainer />
                     <CardContent sx={{ px: 2.5, pt: 3 }}>
                       <Grid container justifyContent="space-between" alignItems="center">
                         <Grid item>
@@ -185,7 +189,6 @@ const Profile = () => {
                           <Dialog open={passwordopen} onClose={handlepasswordclose}>
                             <DialogTitle className='editTitle'>Change Password</DialogTitle>
                             <DialogContent>
-                              <ToastContainer />
                               <Grid className='changepassinnerdiv my-4 '>
                                 <Grid item >
                                   <TextField

@@ -48,19 +48,16 @@ const AddDeductBeanHook = () => {
     }
 
     try {
-      const response = await fetch(`${baseURLProd}ExcelUpload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+      if (selectedFiles.length > 0) {
+        const response = await fetch(`${baseURLProd}ExcelUpload`, {
+          method: 'POST',
+          body: formData,
+        });
+        const data = await response.json();
+        toast.success(data.message)
+        setSelectedFiles("")
+        fetchData()
       }
-
-      const data = await response.json();
-      toast.success(data.message)
-      setSelectedFiles("")
-      fetchData()
     } catch (error) {
       console.error('Error uploading files:', error);
     }
@@ -118,39 +115,57 @@ const AddDeductBeanHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "add/deductBean.csv");
     document.body.appendChild(link);
     link.click();
   };
 
   //-------------select value--------------------
+
   const handleChange = (e, userId) => {
     const { value } = e.target;
-    const newData = newSearchData.map(item => {
-      if (item.userId === userId) {
-        return { ...item, amount: value };
-      }
-      return item;
-    });
-    setFilter(newData);
-    setNewSearchData(newData);
+    const validNumberPattern = /^[0-9]*$/;
+    if (!validNumberPattern.test(value)) {
+      window.alert("Coin Amount should be in number only");
+    }
+    else if (!isNaN(value)) {
+      const newData = newSearchData.map(item => {
+        if (item.userId === userId) {
+          return { ...item, amount: value };
+        }
+        return item;
+      });
+      setFilter(newData);
+      setNewSearchData(newData);
+    } else {
+      window.alert("Coin Amount can't exceed 50 Million");
+    }
   };
-
   //---------------add beans-------------//
   const handleSubmit = async () => {
     try {
       for (const row of filter) {
-        if (row.userId && row.amount) {
-          await fetch(`${baseURLProd}AddBean`, {
-            method: 'POST',
-            body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
+        if (!row.userId || !row.amount) {
+          alert('please enter the coin amount');
+          return;
+        }
+        if (row.amount > 50000000) {
+          alert('Amount cannot exceed 50 million.');
+          return;
         }
       }
       if (window.confirm("Are you sure to add beans")) {
+        for (const row of filter) {
+          if (row.userId && row.amount) {
+            await fetch(`${baseURLProd}AddBean`, {
+              method: 'POST',
+              body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          }
+        }
         toast.success("Beans Added successfully");
         fetchData();
       }
@@ -163,17 +178,30 @@ const AddDeductBeanHook = () => {
   const handleDeductBean = async () => {
     try {
       for (const row of filter) {
-        if (row.userId && row.amount) {
-          await fetch(`${baseURLProd}DeductBean`, {
-            method: 'POST',
-            body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
+        if (!row.userId || !row.amount) {
+          alert('please enter the coin amount');
+          return;
+        }
+        const amount = Number(row.amount);
+        const availableBeans = Number(row.availableBeans);
+  
+        if (amount > availableBeans) {
+          alert('Entered amount should not be more than available coins.');
+          return;
         }
       }
       if (window.confirm("Are you sure to deduct beans")) {
+        for (const row of filter) {
+          if (row.userId && row.amount) {
+            await fetch(`${baseURLProd}DeductBean`, {
+              method: 'POST',
+              body: JSON.stringify({ userId: row.userId, beanAmount: row.amount }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          }
+        }
         toast.success("Beans deducted successfully");
         fetchData();
       }
@@ -181,9 +209,12 @@ const AddDeductBeanHook = () => {
       console.error('Error adding beans coins:', error);
     }
   }
-
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit,
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleReset, data,
     selectedFiles, handleFileChange, handleUpload, handleChange, handleDeductBean, newSearchData
   }
 }

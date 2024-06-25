@@ -1,6 +1,6 @@
 
 import MainCard from 'components/MainCard';
-import { Grid,Button, Dialog, DialogContent } from '@mui/material';
+import { Grid, Button, Dialog, DialogContent } from '@mui/material';
 // import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 // import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DataTable from 'react-data-table-component';
@@ -11,8 +11,8 @@ import { ToastContainer } from 'react-toastify';
 import StatusHook from './StatusHook';
 
 const IdBanUnban = () => {
-  const { filter, search, setSearch,handleIdUnban, downloadCSV,
-    openPreview,handleClosePreview,handlePopup,handleIdBan,setIdBanReason,idBanReason } = StatusHook()
+  const { filter, search, setSearch, handleIdUnban, downloadCSV, handleBanClick, handleInputChange,
+    openPreview, handleClosePreview, handlePopup, idBanReason, validationMessage ,data,handleReset } = StatusHook()
 
   const column = [
 
@@ -20,59 +20,55 @@ const IdBanUnban = () => {
       name: "User Id",
       // selector: id,
       cell: row => <div className="custom-cell">{row.userId}</div>,
-      width:"150px"
+      width: "150px"
     },
     {
       name: "Name",
       // selector: id,
       cell: row => <div className="custom-cell">{row.name}</div>,
-      width:"170px"
+      width: "170px"
     }, {
       name: "Phone",
       // selector: id,
       cell: row => <div className="custom-cell">{row.mobile}</div>,
-      width:"170px"
+      width: "170px"
     }, {
       name: "Email",
       // selector: id,
       cell: row => <div className="custom-cell">{row.email}</div>,
-      width:"250px"
-    }, 
+      width: "250px"
+    },
     {
       name: "Block Count",
       // selector: id,
       cell: row => <div className="custom-cell">{row.blockCount}</div>,
-      width:"150px"
+      width: "150px"
     },
     {
       name: "Block Time",
       // selector: id,
       cell: row => <div className="custom-cell">{row.blockTime}</div>,
       // width:"150px"
-    },{
-      
+    },
+    {
+
       name: "ID Ban Reason",
       // selector: id,
       cell: row => <div className="custom-cell">{row.iD_BanReason}</div>,
-      width:"150px"
+      width: "150px"
     },
-    {
-      name: " Block Reason",
-      // selector: price,
-      cell: row => <div className="custom-cell">{row.block_Reason}</div>,
-      width:"150px"
-    },
+
     {
       name: "Block Date",
       // selector: category,
       cell: row => <div className="custom-cell">{row.blockDate}</div>,
-      width:"150px"
+      width: "150px"
     },
     {
       name: "Block Duration",
       // selector: category,
       cell: row => <div className="custom-cell">{row.blockDuration}</div>,
-      width:"150px"
+      width: "150px"
     },
     {
       name: 'Action',
@@ -84,7 +80,7 @@ const IdBanUnban = () => {
           <>
             <button
               className='btn btn-primary me-2'
-              onClick={() => handlePopup(userId )}
+              onClick={() => handlePopup(userId)}
               disabled={isBanned}
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
@@ -92,7 +88,7 @@ const IdBanUnban = () => {
             </button>
             <button
               className='btn btn-primary'
-              onClick={() => handleIdUnban( userId)}
+              onClick={() => handleIdUnban(userId)}
               disabled={isUnbanned}
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
@@ -126,6 +122,7 @@ const IdBanUnban = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -134,6 +131,9 @@ const IdBanUnban = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
@@ -159,15 +159,22 @@ const IdBanUnban = () => {
         <DialogContent>
           {/* <img src={previewImageUrl} alt="Preview" width='260px' /> */}
           <div>
-            <h5 style={{textDecoration:"underline",marginBottom:"15px"}}>User Id Ban Reason </h5>
+            <h5 style={{ textDecoration: "underline", marginBottom: "15px" }}>User Id Ban Reason </h5>
           </div>
-          <div className='p-2'><b>Ban Reason</b><span style={{color:'red'}}>*</span></div>
+          <div className='p-2'><b>Ban Reason</b><span style={{ color: 'red' }}>*</span></div>
           <div>
-            <textarea style={{width:"100%",height:"139px"}} placeholder='Enter here (Minimum 20,Maximum 200 characters)' value={idBanReason} onChange={(e)=>setIdBanReason(e.target.value)}></textarea>
+            <textarea required style={{ width: "100%", height: "139px" }} placeholder='Enter here (Minimum 20,Maximum 200 characters)'
+              value={idBanReason}
+              onChange={handleInputChange} />
+            {validationMessage && (
+              <div style={{ color: 'red', marginTop: '4px' }}>
+                {validationMessage}
+              </div>
+            )}
           </div>
           <div className='d-flex justify-content-end mt-3'>
-            <button className='btn btn-primary me-3' style={{ backgroundColor: '#EF9848', border: '0px' }}onClick={handleClosePreview} >Cancel</button>
-            <button className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleIdBan}>save</button>
+            <button className='btn btn-primary me-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleClosePreview} >Cancel</button>
+            <button className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBanClick}>Save</button>
           </div>
         </DialogContent>
       </Dialog>

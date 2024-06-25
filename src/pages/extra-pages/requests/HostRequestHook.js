@@ -15,6 +15,9 @@ const HostRequestHook = () => {
   const [phone, setPhone] = useState('');
   const [agencyCode, setAgencyCode] = useState('');
   const [hostCode, setHostCode] = useState('');
+  const [status, setStatus] = useState('');
+  const [showApproveButton, setShowApproveButton] = useState(true);
+  const [showRejectButton, setShowRejectButton] = useState(true);
   //---------------------fetch data---------------//
 
   const fetchData = async () => {
@@ -47,6 +50,7 @@ const HostRequestHook = () => {
   //---------------approve-------------------//
   const handleApprove = async ({ agencyCode, userId }) => {
     try {
+      if (window.confirm("Are you sure to Approve the Request")) {
       await fetch(`${baseURLProd}HostRequestApprove`, {
         method: 'POST',
         body: JSON.stringify({ agencyCode: agencyCode, userId: userId }),
@@ -54,7 +58,6 @@ const HostRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to Approve the Request")) {
         const rowIndex = data.findIndex(item => item.agencyCode === agencyCode);
         if (rowIndex !== -1) {
           const updatedData = [...data];
@@ -72,6 +75,7 @@ const HostRequestHook = () => {
   //--------------------reject ------------------------//
   const handleReject = async ({ agencyCode, userId }) => {
     try {
+      if (window.confirm("Are you sure to Reject the Request")) {
       await fetch(`${baseURLProd}HostRequestReject`, {
         method: 'POST',
         body: JSON.stringify({ agencyCode: agencyCode, userId: userId }),
@@ -79,7 +83,6 @@ const HostRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to Reject the Request")) {
         const rowIndex = data.findIndex(item => item.agencyCode === agencyCode && item.userId === userId);
         if (rowIndex !== -1) {
           const updatedData = [...data];
@@ -138,7 +141,7 @@ const HostRequestHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "host_request.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -158,6 +161,7 @@ const HostRequestHook = () => {
     e.preventDefault();
 
     try {
+      if (window.confirm("Are you sure to change the host details ?")) {
       const response = await fetch(`${baseURLProd}EditHostrequest`, {
         method: 'POST',
         headers: {
@@ -178,7 +182,6 @@ const HostRequestHook = () => {
       }
 
       await response.json();
-      if (window.confirm("Are you sure to change the host details ?")) {
 
         fetchData()
         setOpen(false);
@@ -198,12 +201,40 @@ const HostRequestHook = () => {
   const handleClose = () => {
     setOpen(false)
   }
+  const handleStatusChange = (status) => {
+    setStatus(status);
+    setShowApproveButton(true); // Reset to default
+    setShowRejectButton(true); // Reset to default
+  };
+
+  const handlefilterSubmit = () => {
+    if (status) {
+      const filtered = data.filter(item => item.status === status);
+      setFilter(filtered);
+      
+      if (status === 'Approved') {
+        setShowRejectButton(false);
+      } else if (status === 'Rejected') {
+        setShowApproveButton(false);
+      }
+    } else {
+      setFilter(data);
+      setShowApproveButton(true);
+      setShowRejectButton(true);
+    }
+  };
+  const handleReset = () => {
+    setSearch('');
+    setStatus("")
+    setFilter(data);
+  };
   return {
     filter, search, setSearch, openPreview, setOpenPreview, previewImageUrl, setPreviewImageUrl,
     handleClosePreview, handleDownload, handleImageClick, handleApprove,
     handleReject, downloadCSV, handleEdit, handleSubmit, handleClose,
     open, userId, name, type, agencyCode, hostCode, phone, setOpen, setUserId, setName, setType,
-    setAgencyCode, setHostCode, setPhone
+    setAgencyCode, setHostCode, setPhone,data,handleReset,handleStatusChange,handlefilterSubmit,status,
+    showApproveButton,showRejectButton
   }
 }
 

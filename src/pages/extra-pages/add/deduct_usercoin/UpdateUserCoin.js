@@ -9,8 +9,7 @@ import UpdateUsercoinHook from './updateUsercoinHOok';
 import demoImage from '../../../../assets/images/users/sfaLogo.png'
 const UpdateUserCoin = () => {
   const { filter, search, setSearch,handleChange,handleSubmit,handleDeductCoin,
-    newSearchData } = UpdateUsercoinHook()
-
+    newSearchData,data,handleReset,amounts } = UpdateUsercoinHook()
   const defaultColumns = [
     {
       name: "User Id",
@@ -80,16 +79,16 @@ const UpdateUserCoin = () => {
       name: "Amount",
       cell: (row) =>{
         const userId =row.userId
-        const amount =row.amount
+        // const amount =row.amount
         return(
           <>
           <div className="custom-cell">
-            <input type='number' className='form-control p-2' value={amount} placeholder='Enter Coin Value' onChange={e => handleChange(e, userId)}></input>
+            <input type='number' className='form-control p-2' value={amounts} placeholder='Enter Coin Amount' onChange={e => handleChange(e, userId)}></input>
           </div>
           </>
         )
       },
-      
+      width:'230px'
     }
     ,
     {
@@ -140,6 +139,7 @@ const UpdateUserCoin = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -148,6 +148,9 @@ const UpdateUserCoin = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='d-flex justify-content-between'>
           <div className='d-flex'>
             <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}

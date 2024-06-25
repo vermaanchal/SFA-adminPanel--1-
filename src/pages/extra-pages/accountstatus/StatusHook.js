@@ -9,6 +9,8 @@ const StatusHook = () => {
   const [openPreview, setOpenPreview] = useState(false);
   const [idBanUserid,setIdbanUserid] =useState("")
   const [idBanReason,setIdBanReason] =useState("")
+const [validationMessage, setValidationMessage] = useState('');
+
   const fetchData = async () => {
       try {
           let req = await fetch(`${baseURLProd}IDBanUnBanUserDetails`, {
@@ -37,9 +39,16 @@ const StatusHook = () => {
     setFilter(result)
 }, [search])
 
+const handleInputChange = (e) => {
+  setIdBanReason(e.target.value);
+  if (e.target.value.trim() !== '') {
+    setValidationMessage('');
+  }
+};
 //-----------request Approve ---------------//
 const handleIdBan = async () => {
   try {
+    if (window.confirm("Are you sure to Ban this Id ?")) {
     await fetch(`${baseURLProd}IdBan`, {
       method: 'POST',
       body: JSON.stringify({ userID: idBanUserid, idBanReason:idBanReason }),
@@ -47,7 +56,6 @@ const handleIdBan = async () => {
         'Content-Type': 'application/json'
       }
     });
-    if (window.confirm("Are you sure to Ban this Id ?")) {
     const rowIndex = data.findIndex(item => item.userId === idBanUserid);
     if (rowIndex !== -1) {
       const updatedData = [...data];
@@ -63,9 +71,17 @@ const handleIdBan = async () => {
     console.error('Error approving request:', error);
   }
 };
+const handleBanClick = () => {
+  if (idBanReason.trim() === '') {
+    setValidationMessage('Please enter the IdBan reason !');
+  } else {
+    handleIdBan();
+  }
+};
 // -----------------request Reject--------------//
 const handleIdUnban = async (userId) => {
   try {
+    if (window.confirm("Are you sure to Unban this Id?")) {
     await fetch(`${baseURLProd}IdUnBan`, {
       method: 'POST',
       body: JSON.stringify({ userID:userId }),
@@ -73,7 +89,6 @@ const handleIdUnban = async (userId) => {
         'Content-Type': 'application/json'
       }
     });
-    if (window.confirm("Are you sure to Unban this Id?")) {
     const rowIndex = data.findIndex(item => item.userId === userId);
     if (rowIndex !== -1) {
       const updatedData = [...data];
@@ -89,6 +104,7 @@ const handleIdUnban = async (userId) => {
   }
 };
 const handleClosePreview = () => {
+  setIdBanReason("")
   setOpenPreview(false);
 };
 const handlePopup = (userId) => {
@@ -108,14 +124,17 @@ const downloadCSV = () => {
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "data.csv");
+  link.setAttribute("download", "Id_banUnban.csv");
   document.body.appendChild(link);
   link.click();
 };
-
+const handleReset = () => {
+  setSearch('');
+  setFilter(data);
+};
   return {
-    filter,search,setSearch,handleIdBan,handlePopup,
-    handleIdUnban,downloadCSV,openPreview,handleClosePreview,idBanReason,setIdBanReason
+    filter,search,setSearch,handleIdBan,handlePopup,handleBanClick,handleInputChange,validationMessage,
+    handleIdUnban,downloadCSV,openPreview,handleClosePreview,idBanReason,setIdBanReason,handleReset,data
 }
 }
 

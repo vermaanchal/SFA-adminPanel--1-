@@ -6,9 +6,16 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import FruitSlotHook from './fruitSlotHook';
 const FruitSlot = () => {
-  const { filter, search, setSearch,downloadCSV ,selectgame,setSelectGame,handleGameBtn} = FruitSlotHook()
+  const { filter, search, setSearch,downloadCSV ,selectgame,
+    setSelectGame,handleGameBtn,handleReset,data} = FruitSlotHook()
     
   const column = [
+      {
+      name: "No.",
+      // selector: id,
+      cell: (row,index) => <div className="custom-cell">{index + 1}</div>,
+      // width: '100px'
+    },
     {
       name: "User Id",
       // selector: id,
@@ -68,6 +75,7 @@ const FruitSlot = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -76,19 +84,22 @@ const FruitSlot = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
             subHeader
             subHeaderComponent={
               <>
-                <div className='d-flex justify-content-between'>
-                  <div className='d-flex'>
+                <div className='row'>
+                  <div className='d-flex col'>
                     <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
                     <div className='searchIcon'><SearchOutlinedIcon/></div>
                   </div>
-                  <div>
+                  <div className='col'>
                   <FormControl className='designationForm'>
                     <InputLabel id="select-label">Select</InputLabel>
                     <Select
@@ -108,7 +119,7 @@ const FruitSlot = () => {
                     onClick={handleGameBtn}
                     >Submit</button>
                   </div>
-                  <div>
+                  <div className='col'>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
                   </div>
                 </div>

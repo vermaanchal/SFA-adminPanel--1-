@@ -71,14 +71,14 @@ const VideoUploadHook = () => {
     }, [search])
 
     const handleDelete = async (userId, videoId) => {
-        await fetch(`${baseURLProd}DeleteVideo`, {
-            method: "POST",
-            body: JSON.stringify({ userId: userId, videoId: videoId }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        if (window.confirm("Are you sure to delete this data")) {
+        if (window.confirm("Are you sure to delete this video")) {
+            await fetch(`${baseURLProd}DeleteVideo`, {
+                method: "POST",
+                body: JSON.stringify({ userId: userId, videoId: videoId }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
             const newData = data.filter(row => (row.userid !== userId && row.videoid !== videoId));
             setFilter(newData);
             fetchData();
@@ -98,14 +98,18 @@ const VideoUploadHook = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", "video_record.csv");
         document.body.appendChild(link);
         link.click();
+    };
+    const handleReset = () => {
+        setSearch('');
+        setFilter(data);
     };
     return {
         openPreview, previewImageUrl, openVideoPreview, videoUrl, setSearch, handleImageClick,
         handleClosePreview, handleVideoPreview, handleCloseVideoPreview, handleDownload, handleDelete,
-        downloadCSV, filter, search
+        downloadCSV, filter, search, handleReset, data
     }
 }
 

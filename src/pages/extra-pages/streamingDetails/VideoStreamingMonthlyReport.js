@@ -75,7 +75,7 @@ const VideoStreamingMonthlyReport = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", "videoStreaming_monthlyreport.csv");
         document.body.appendChild(link);
         link.click();
     };

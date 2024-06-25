@@ -27,7 +27,7 @@ const UpdateFrames = () => {
       cell: row => {
         const userId= row.userId
         return (
-          <select value={frameId} onChange={e => handleSelectChange(e, userId)}>
+          <select value={frameId} onChange={e => handleSelectChange(e, userId)} className='frameSelect'>
             <option>Select Frame</option>
            {frameOption.map((option) => {
             return(
@@ -46,7 +46,7 @@ const UpdateFrames = () => {
       name: 'Duration',
       cell: () => {
         return (
-          <select value={duration} onChange={handleDurationChange}>
+          <select value={duration} onChange={handleDurationChange} className='frameSelect'>
          <option value="">Select Duration</option>
             <option value="7 days">7 days</option>
             <option value="15 days">15 days</option>

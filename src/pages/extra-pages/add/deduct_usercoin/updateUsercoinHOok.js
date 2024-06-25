@@ -9,7 +9,7 @@ const UpdateUsercoinHook = () => {
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
   const [newSearchData, setNewSearchData] = useState([])
-
+  const [amounts,setamounts]=useState("")
   const fetchData = async () => {
     try {
       let req = await fetch(`${baseURLProd}Add_DeductCoinUserDetails`, {
@@ -30,7 +30,7 @@ const UpdateUsercoinHook = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   //--------------------filter------------------//
   useEffect(() => {
     const fetchSearchResults = async () => {
@@ -70,7 +70,7 @@ const UpdateUsercoinHook = () => {
     fetchSearchResults();
   }, [search, data]);
 
-//-----------------download CSV-------------//
+  //-----------------download CSV-------------//
   const downloadCSV = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
@@ -82,26 +82,44 @@ const UpdateUsercoinHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "Add/deductCoin.csv");
     document.body.appendChild(link);
     link.click();
   };
 
   const handleChange = (e, userId) => {
     const { value } = e.target;
-    const newData = newSearchData.map(item => {
-      if (item.userId === userId) {
-        return { ...item, amount: value };
-      }
-      return item;
-    });
-    setFilter(newData);
-    setNewSearchData(newData);
+    const validNumberPattern = /^[0-9]*$/;
+    if (!validNumberPattern.test(value)) {
+      window.alert("Coin Amount should be in number only");
+    }
+    else if (!isNaN(value)) {
+      const newData = newSearchData.map(item => {
+        if (item.userId === userId) {
+          item.amount =value;
+         setamounts(value)
+        }
+        return item;
+      });
+      setFilter(newData);
+      setNewSearchData(newData);
+    }
   };
 
   //---------------add Coin-------------//
   const handleSubmit = async () => {
     try {
+      for (const row of newSearchData) {
+        if (!row.userId || !row.amount) {
+          alert('please enter the coin amount');
+          return;
+        }
+        if (row.amount > 50000000) {
+          alert('Amount cannot exceed 50 million.');
+          return;
+        }
+      }
+      if (window.confirm("Are you sure to add Coins")) {
       for (const row of newSearchData) {
         if (row.userId && row.amount) {
           await fetch(`${baseURLProd}AddCoinAmount`, {
@@ -113,40 +131,58 @@ const UpdateUsercoinHook = () => {
           });
         }
       }
-      if (window.confirm("Are you sure to add Coins")) {
+
         toast.success("Coins Added successfully");
+        setamounts("")
         fetchData();
       }
     } catch (error) {
-      console.error('Error adding beans coins:', error);
+      console.error('Error adding coins:', error);
     }
   }
-
   //---------------deduct beans-------------//
   const handleDeductCoin = async () => {
     try {
       for (const row of newSearchData) {
-        if (row.userId && row.amount) {
-          await fetch(`${baseURLProd}DeductCoinAmount`, {
-            method: 'POST',
-            body: JSON.stringify({ userId: row.userId, coinAmount: row.amount }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
+        if (!row.userId || !row.amount) {
+          alert('please enter the coin amount');
+          return;
+        } 
+        const amount = Number(row.amount);
+        const availableCoins = Number(row.availableCoins);
+  
+        if (amount > availableCoins) {
+          alert('Entered amount should not be more than available coins.');
+          return;
         }
       }
-      if (window.confirm("Are you sure to deduct Coins")) {
-        toast.success("Coins deducted successfully");
-        fetchData();
-      }
+        if (window.confirm("Are you sure to deduct Coins")) {
+        for (const row of newSearchData) {
+          if (row.userId && row.amount) {
+            await fetch(`${baseURLProd}DeductCoinAmount`, {
+              method: 'POST',
+              body: JSON.stringify({ userId: row.userId, coinAmount: row.amount }),
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+          }
+        }
+          toast.success("Coins deducted successfully");
+          setamounts("")
+          fetchData();
+        }
     } catch (error) {
       console.error('Error adding beans coins:', error);
     }
   }
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
   return {
     filter, search, setSearch, downloadCSV, handleChange, handleSubmit, handleDeductCoin
-    , newSearchData, data, setFilter, setNewSearchData
+    , newSearchData, data, setFilter, setNewSearchData, handleReset,amounts
   }
 }
 

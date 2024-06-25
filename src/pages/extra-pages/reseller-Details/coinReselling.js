@@ -41,11 +41,12 @@ const CoinReselling = () => {
         return (
           <>
             <div className="custom-cell">
-              <input type='number' className='form-control p-2' value={coinAmount} placeholder='Enter Coin Value' onChange={e => handleChange(e, userId)}></input>
+              <input type='number' className='form-control p-2' value={coinAmount} placeholder='Enter Coin Amount' onChange={e => handleChange(e, userId)}></input>
             </div>
           </>
         )
       },
+      width: '230px'
     },
     {
       name: 'Action',
@@ -55,7 +56,7 @@ const CoinReselling = () => {
             <button
               className='btn btn-primary me-2'
               onClick={handleSubmit}
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
+              style={{ backgroundColor: '#EF9848', border: '0px',marginLeft:"10px" }}
             >
               Add
             </button>

@@ -7,7 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import ReceivingReportHook from './ReceivingReportHook';
 const ReceivingReport = () => {
   const { filter, search, setSearch, downloadCSV, handleFilter, fromDate, toDate, setFromDate, setToDate,
-    handleAdminRecieving,handleAgencyRecieving} = ReceivingReportHook()
+    handleAdminRecieving,handleAgencyRecieving,handleReset,data} = ReceivingReportHook()
 
   const column = [
     {
@@ -49,7 +49,10 @@ const ReceivingReport = () => {
     }, {
       name: " Month Date ",
       // selector: id,
-      cell: row => <div className="custom-cell">{row.date}</div>,
+      cell: row => {
+        const dateOnly = row.date.split(' ')[0];
+        return <div className="custom-cell">{dateOnly}</div>;
+    },
       // width: '200px'
     }
   ]
@@ -74,6 +77,7 @@ const ReceivingReport = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -82,6 +86,9 @@ const ReceivingReport = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination

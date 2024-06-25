@@ -6,7 +6,7 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import DeductResellerHook from './deductResellerHook';
 const DeductResellerCoin = () => {
-  const { filter, search, setSearch, handleSubmit ,handleChange} = DeductResellerHook()
+  const { filter, search, setSearch, handleSubmit ,handleChange,data,handleReset,buttonStates} = DeductResellerHook()
 
   const column = [
     {
@@ -51,22 +51,24 @@ const DeductResellerCoin = () => {
         return(
           <>
           <div className="custom-cell">
-            <input type='number' className='form-control p-2' value={coinAmount} placeholder='Enter Coin Value' onChange={e => handleChange(e, userId)}></input>
+            <input type='number' className='form-control p-2' value={coinAmount} placeholder='Enter Coin Amount' onChange={e => handleChange(e, userId)}></input>
           </div>
           </>
         )
       },
-      
+      width:"230px"
     }
     ,
     {
       name: 'Action',
-      cell: () => {
-        return (
+      cell: row => {
+       const userId = row.userId
+        return ( 
           <>
             <button
               className='btn btn-primary me-2'
               onClick={handleSubmit}
+              disabled={ !buttonStates[userId]}
               style={{ backgroundColor: '#EF9848', border: '0px' }}
             >
               Deduct
@@ -100,6 +102,7 @@ const DeductResellerCoin = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -108,6 +111,9 @@ const DeductResellerCoin = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination

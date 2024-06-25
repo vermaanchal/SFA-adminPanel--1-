@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 
 const FeedbackReportHook = () => {
     const [data,setData] =useState([]);
+    const [openPreview, setOpenPreview] = useState(false);
+    const [previewImageUrl, setPreviewImageUrl] = useState('');
 
     const fetchData= async()=>{
         const req= await fetch(`${baseURLProd}GetReport_Feedback_Details`,{
@@ -16,9 +18,15 @@ const FeedbackReportHook = () => {
     useEffect(()=>{
         fetchData()
     },[])
-
+    const handleImageClick = (imageUrl) => {
+      setPreviewImageUrl(imageUrl);
+      setOpenPreview(true);
+    };
+    const handleClosePreview = () => {
+      setOpenPreview(false);
+    };
   return {
-    data
+    data,openPreview,previewImageUrl,handleClosePreview,handleImageClick
   }
 }
 

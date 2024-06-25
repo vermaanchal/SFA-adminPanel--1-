@@ -7,9 +7,16 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import SFAgameHook from './SFAgameHook';
 const SFAguess = () => {
-  const { filter, search, setSearch,downloadCSV,selectgame,setSelectGame,handleGameBtn } = SFAgameHook()
+  const { filter, search, setSearch,downloadCSV,selectgame,
+    setSelectGame,handleGameBtn,handleReset,data } = SFAgameHook()
     
   const column = [
+    {
+      name: "No.",
+      // selector: id,
+      cell: (row,index) => <div className="custom-cell">{index + 1}</div>,
+      // width: '100px'
+    },
     {
       name: "User Id",
       // selector: id,
@@ -68,6 +75,7 @@ const SFAguess = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -76,6 +84,9 @@ const SFAguess = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination

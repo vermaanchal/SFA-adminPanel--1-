@@ -11,7 +11,8 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import ResellerHook from './resellerHook';
 const CreateReseller = () => {
-  const { filter, search, setSearch, downloadCSV,handleSubmit,handleSelectChange } = ResellerHook()
+  const { filter, search, setSearch, downloadCSV,handleSubmit,handleSelectChange 
+    ,data,handleReset,buttonStates} = ResellerHook()
  
   const column = [
 
@@ -38,7 +39,7 @@ const CreateReseller = () => {
         const userId= row.userId
         const resellerTypeId =row.resellerTypeId
         return (
-          <select value={resellerTypeId} onChange={e => handleSelectChange(e, userId)}>
+          <select value={resellerTypeId} onChange={e => handleSelectChange(e, userId)} className='frameSelect'> 
             <option value="">Select Reseller</option>
             <option value="1">Wood</option>
             <option value="2">Copper</option>
@@ -53,20 +54,24 @@ const CreateReseller = () => {
 
     {
       name: 'Action',
-      cell: () => {
+      cell: row => {
+        const userId =row.userId
+        // const resellerTypeId =row.resellerTypeId
         return (
           <>
             <button
-              onClick={()=>handleSubmit()}
-              className='btn btn-primary me-4'
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
-            >
-              Create
-            </button>
+           onClick={() => handleSubmit(userId)}
+          //  disabled={!buttonStates[userId]}
+           disabled={ !buttonStates[userId]}
+            className='btn btn-primary me-4'
+            style={{ backgroundColor: '#EF9848', border: '0px',marginLeft:"30px" }}
+          >
+            Create
+          </button>
           </>
         );
       },
-      width: '210px'
+      width: '200px'
 
     }
   ]
@@ -91,6 +96,7 @@ const CreateReseller = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -99,6 +105,9 @@ const CreateReseller = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination

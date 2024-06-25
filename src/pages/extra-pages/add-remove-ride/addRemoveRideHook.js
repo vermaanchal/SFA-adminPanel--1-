@@ -7,8 +7,8 @@ const AddRemoveRideHook = () => {
   const [userId, setUserId] = useState('');
   const [show ,setShow] =useState(false);
   const [rideOption,setRIdeOption] =useState([])
-  const [duration ,setDuration] =useState([])
-  const [rideId ,setRideId] =useState([])
+  const [duration ,setDuration] =useState('')
+  const [rideId ,setRideId] =useState('')
 
   const handleUserIdChange = (event) => {
     setUserId(event.target.value);
@@ -55,7 +55,7 @@ const AddRemoveRideHook = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", "add/removeRide.csv");
         document.body.appendChild(link);
         link.click();
     };
@@ -74,6 +74,10 @@ const AddRemoveRideHook = () => {
 const handleAddRide = async () => {
 
     try {
+      if (!duration || !rideId || !duration && !rideId) {
+        window.confirm("please select duration & rideId ")
+      }
+      if (duration && rideId) {
           await fetch(`${baseURLProd}SendRideToUser`, {
             method: 'POST',
             body: JSON.stringify({ userId: filter.userId, rideId: rideId,
@@ -83,8 +87,11 @@ const handleAddRide = async () => {
             }
           });
      toast.success("Ride Added Succesfully")
+     setRideId("")
+     setDuration('')
      handleButtonClick()
     }
+  }
     catch (error) {
       console.error('error', error);
     }
@@ -94,6 +101,10 @@ const handleAddRide = async () => {
 const handleRemoveRide = async () => {
 
     try {
+      if (!duration || !rideId || !duration && !rideId) {
+        window.confirm("Nothing is selected ")
+      }
+      if (duration && rideId) {
           await fetch(`${baseURLProd}RemoveRideToUser`, {
             method: 'POST',
             body: JSON.stringify({ userId: filter.userId,  rideId:rideId,
@@ -107,6 +118,7 @@ const handleRemoveRide = async () => {
      setDuration('')
      handleButtonClick()
     }
+  }
     catch (error) {
       console.error('error', error);
     }

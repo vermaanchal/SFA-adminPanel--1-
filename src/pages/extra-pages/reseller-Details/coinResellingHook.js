@@ -44,7 +44,7 @@ const CoinResellingHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "CoinReselling.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -52,17 +52,32 @@ const CoinResellingHook = () => {
 
   const handleChange = (e, userId) => {
     const { value } = e.target;
-    const newData = { ...filter };
-    if (newData.userId === userId) {
-      newData.coinAmount = value;
+    const validNumberPattern = /^[0-9]*$/;
+    if (!validNumberPattern.test(value)) {
+      window.alert("Coin Amount should be in number only");
     }
-    setFilter(newData);
+    else if (!isNaN(value) && Number(value) <= 50000000) {
+      const newData = { ...filter };
+      if (newData.userId === userId) {
+        newData.coinAmount = value;
+      }
+      setFilter(newData);
+    }
+    else {
+      window.alert("Coin Amount can't exceed 50 Million");
+
+    }
   };
 
   // //---------------Add Reseller-------------//
   const handleSubmit = async () => {
 
     try {
+        if (!filter.userId || !filter.coinAmount) {
+          alert('please enter the coin amount');
+          return;
+        }
+      if (window.confirm("Are you sure to Add coins")) {
       await fetch(`${baseURLProd}AddResellerCoin`, {
         method: 'POST',
         body: JSON.stringify({ userId: filter.userId, coinAmount: filter.coinAmount }),
@@ -70,7 +85,6 @@ const CoinResellingHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to Add coins")) {
         toast.success("Reseller coin Added Succesfully")
         handleButtonClick()
       }

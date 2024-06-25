@@ -5,10 +5,10 @@ import { toast } from 'react-toastify';
 const AddRemoveFrameHook = () => {
   const [filter, setFilter] = useState('');
   const [userId, setUserId] = useState('');
-  const [show ,setShow] =useState(false);
-  const [frameOption,setFrameOption] =useState([])
-  const [duration ,setDuration] =useState([])
-  const [frameId ,setFrameId] =useState([])
+  const [show, setShow] = useState(false);
+  const [frameOption, setFrameOption] = useState([])
+  const [duration, setDuration] = useState('')
+  const [frameId, setFrameId] = useState('')
 
   const handleUserIdChange = (event) => {
     setUserId(event.target.value);
@@ -22,44 +22,44 @@ const AddRemoveFrameHook = () => {
   const handleButtonClick = async () => {
     if (userId.length === 7) {
       setShow(true)
-    try {
-          const response = await fetch(`${baseURLProd}SearchUserByUserIdForFrame`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ userId: userId })
-          }); 
-          const data = await response.json();
-          setFilter(data);
-          setFrameOption(data.frameList)
-    } catch (error) {
-      console.error('Error:', error);
+      try {
+        const response = await fetch(`${baseURLProd}SearchUserByUserIdForFrame`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId: userId })
+        });
+        const data = await response.json();
+        setFilter(data);
+        setFrameOption(data.frameList)
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
-  }
   };
-  useEffect(()=>{
+  useEffect(() => {
     handleButtonClick()
-  },[userId])
+  }, [userId])
 
-//----------------download CSV file-----------------//
-    const downloadCSV = () => {
-        // Format the data for CSV
-        const csvContent =
-            "data:text/csv;charset=utf-8," +
-            [
-                Object.keys(filter[0]).join(','), // Header row
-                ...filter.map((row) => Object.values(row).join(',')), // Data rows
-            ].join('\n');
+  //----------------download CSV file-----------------//
+  const downloadCSV = () => {
+    // Format the data for CSV
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [
+        Object.keys(filter[0]).join(','), // Header row
+        ...filter.map((row) => Object.values(row).join(',')), // Data rows
+      ].join('\n');
 
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
-        document.body.appendChild(link);
-        link.click();
-    };
-//-------------select value--------------------
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "add/RemoveFrame.csv");
+    document.body.appendChild(link);
+    link.click();
+  };
+  //-------------select value--------------------
   const handleSelectChange = (e, userId) => {
     const { value } = e.target;
     const newData = { ...filter };
@@ -71,19 +71,28 @@ const AddRemoveFrameHook = () => {
   };
 
   // //---------------Add Frame-------------//
-const handleAddFrame = async () => {
+  const handleAddFrame = async () => {
 
     try {
-          await fetch(`${baseURLProd}SendFrameToUser`, {
-            method: 'POST',
-            body: JSON.stringify({ userId: filter.userId, frameId: frameId,
-                duration:duration,adminId:"123456" }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-     toast.success("Frame Added Succesfully")
-     handleButtonClick()
+      if (!duration || !frameId || !duration && !frameId) {
+        window.confirm("please select duration & frameId ")
+      }
+      if (duration && frameId) {
+        await fetch(`${baseURLProd}SendFrameToUser`, {
+          method: 'POST',
+          body: JSON.stringify({
+            userId: filter.userId, frameId: frameId,
+            duration: duration, adminId: "123456"
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        toast.success("Frame Added Succesfully")
+        setFrameId("")
+        setDuration('')
+        handleButtonClick()
+      }
     }
     catch (error) {
       console.error('error', error);
@@ -91,30 +100,37 @@ const handleAddFrame = async () => {
   }
 
   // //---------------Remove Frame-------------//
-const handleRemoveFrame = async () => {
+  const handleRemoveFrame = async () => {
 
     try {
-          await fetch(`${baseURLProd}RemoveFrameToUser`, {
-            method: 'POST',
-            body: JSON.stringify({ userId: filter.userId,  frameId:frameId,
-                adminId:"123456" }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
-     toast.success("Frame Removed Succesfully")
-     setFrameId("")
-     setDuration('')
-     handleButtonClick()
+      if (!duration || !frameId || !duration && !frameId) {
+        window.confirm("Nothing is selected ")
+      }
+      if (duration && frameId) {
+        await fetch(`${baseURLProd}RemoveFrameToUser`, {
+          method: 'POST',
+          body: JSON.stringify({
+            userId: filter.userId, frameId: frameId,
+            adminId: "123456"
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        toast.success("Frame Removed Succesfully")
+        setFrameId("")
+        setDuration('')
+        handleButtonClick()
+      }
     }
     catch (error) {
       console.error('error', error);
     }
   }
-    return {
-       downloadCSV,frameOption,setDuration,duration,handleAddFrame,handleDurationChange,handleRemoveFrame,
-       filter, setFilter,handleButtonClick,userId,show,handleUserIdChange,handleSelectChange,frameId
-    }
+  return {
+    downloadCSV, frameOption, setDuration, duration, handleAddFrame, handleDurationChange, handleRemoveFrame,
+    filter, setFilter, handleButtonClick, userId, show, handleUserIdChange, handleSelectChange, frameId
+  }
 }
 
 export default AddRemoveFrameHook

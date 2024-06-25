@@ -1,6 +1,9 @@
 
 import MainCard from 'components/MainCard';
-import { Grid, Dialog, DialogContent, IconButton, Button, TextField, DialogTitle, DialogActions } from '@mui/material';
+import {
+  Grid, Dialog, DialogContent, IconButton, Button, TextField, DialogTitle, DialogActions,
+  FormControl, InputLabel, MenuItem, Select
+} from '@mui/material';
 // import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 // import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DataTable from 'react-data-table-component';
@@ -14,7 +17,9 @@ const AgencyRequest = () => {
     handleClosePreview, handleDownload, handleImageClick, handleApprove,
     handleReject, downloadCSV, handleEdit, handleSubmit, userId, userName, agencyName, agencyLocation, agencyCode, agencyContact,
     agencyEmail, hostYouHave, open, adminId, setUserId, setUserName, setAgencyCode, setAgencyName, setAgencyContact, setAgencyEmail, setAgencyLocation,
-    setHostYouHave, setAdminId, handleClose } = AgencyRequestHook()
+    setHostYouHave, setAdminId, handleClose, data, handleReset, handleStatusChange, handlefilterSubmit
+    , showApproveButton, showRejectButton,status
+  } = AgencyRequestHook()
 
   const column = [
 
@@ -113,32 +118,53 @@ const AgencyRequest = () => {
         const agencyContact = row.agencyContact;
         const agencyEmail = row.agencyEmail;
         const hostYouHave = row.hostYouHave;
-
-        const isApproved = row.status === 'Approve';
-        const isRejected = row.status === 'Reject';
         return (
           <>
-            <button
-              className='btn btn-primary me-2'
-              onClick={() => handleApprove(agencyCode, userId)}
-              disabled={isApproved}
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
-            >
-              Approve
-            </button>
-            <button
-              className='btn btn-primary'
-              onClick={() => handleReject(agencyCode, userId)}
-              disabled={isRejected}
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
-            >
-              Reject
-            </button>
-            <span className='editrequestbtn'>
-              <EditCalendarOutlinedIcon onClick={() => {
-                handleEdit( userId,agencyName, userName, agencyLocation, agencyContact, agencyEmail, hostYouHave,adminId,agencyCode );
-              }} style={{ color: 'white', cursor: "pointer" }} />
-            </span>
+           {status === '' && (
+              <>
+                <button
+                  className='btn btn-primary me-2'
+                  onClick={() => handleApprove(row.adminid)}
+                  disabled={row.status === 'Approve'}
+                  style={{ backgroundColor: '#EF9848', border: '0px' }}
+                >
+                  Approve
+                </button>
+                <button
+                  className='btn btn-primary me-2'
+                  onClick={() => handleReject(row.adminid)}
+                  disabled={row.status === 'Reject'}
+                  style={{ backgroundColor: '#EF9848', border: '0px' }}
+                >
+                  Reject
+                </button>
+                <span className='editrequestbtn'>
+                  <EditCalendarOutlinedIcon onClick={() => {
+                    handleEdit(userId, agencyName, userName, agencyLocation, agencyContact, agencyEmail, hostYouHave, adminId, agencyCode);
+                  }} style={{ color: 'white', cursor: "pointer" }} />
+                </span>
+              </>
+           )}
+              {status === 'Approve' && showApproveButton && (
+                  <button
+                    className='btn btn-primary me-2'
+                    onClick={() => handleApprove(row.id)}
+                    disabled={row.status === 'Approve'}
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                  >
+                    Approve
+                  </button>
+                )}
+                {status === 'Reject' && showRejectButton && (
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => handleReject(row.id)}
+                    disabled={row.status === 'Reject'}
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                  >
+                    Reject
+                  </button>
+                )}
           </>
         );
       },
@@ -168,6 +194,7 @@ const AgencyRequest = () => {
     }
   }
   // const filteredColumns = column.filter(col => col.name !== 'Action'); 
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -176,6 +203,9 @@ const AgencyRequest = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
@@ -186,7 +216,28 @@ const AgencyRequest = () => {
                   <div className='d-flex'>
                     <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon /></div>
+                    <div className='searchIcon'>
+                      <SearchOutlinedIcon />
+                    </div>
+                  </div>
+                  <div className=''>
+                    <div className='d-flex'>
+
+                      <FormControl style={{ width: '175px' }}>
+                        <InputLabel id="select-label">Select Status</InputLabel>
+
+                        <Select
+                          labelId="select-label"
+                          label='Select Role'
+                          id="select"
+                          style={{ textAlign: "center" }}
+                        >
+                          <MenuItem value="1" onClick={() => handleStatusChange('Approve')}>Approve</MenuItem>
+                          <MenuItem value="2" onClick={() => handleStatusChange('Reject')}>Reject</MenuItem>
+                        </Select>
+                      </FormControl>
+                      <div className='mx-3 d-flex'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handlefilterSubmit}>Submit</button></div>
+                    </div>
                   </div>
                   <div>
                     <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
@@ -308,6 +359,18 @@ const AgencyRequest = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* <Dialog open={alertopen} onClose={handleAlertClose}>
+        <DialogTitle className='editTitle'>Are You Sure to Update the Data?</DialogTitle>
+        <DialogActions className='editButtonDiv'>
+          <Button onClick={handleAlertClose} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+            Cancel
+          </Button>
+          <Button onClick={handleSubmit} className='btn btn-primary' style={{ backgroundColor: '#EF9848', border: '0px' }}>
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog> */}
     </MainCard>
   )
 };

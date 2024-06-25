@@ -10,9 +10,11 @@ import Hook from './Hook';
 import { ToastContainer } from 'react-toastify';
 const AppUserDetails = () => {
   const { filter, search, openPreview, previewImageUrl, setSearch,
-    handleClosePreview, handleDelete, handleEdit, setUserId, setName, setDob, setMobile, setEmail, setPassword
+    handleClosePreview, 
+    // handleDelete,
+     handleEdit, setUserId, setName, setDob, setMobile, setEmail, setPassword
     , userId, name, dob, mobile, email, password, downloadCSV,
-    open, handleClose, handleSubmit } = Hook()
+    open, handleClose, handleSubmit, handleReset, handleSearch, data } = Hook()
 
   const column = [
     {
@@ -75,7 +77,9 @@ const AppUserDetails = () => {
                 }} style={{ color: 'orange', cursor: "pointer" }} />
               </span>
               <span className='deleteIcon' >
-                <DeleteOutlinedIcon onClick={() => handleDelete(userId)} style={{ color: 'red', cursor: "pointer" }} />
+                <DeleteOutlinedIcon 
+                // onClick={() => handleDelete(userId)}
+                 style={{ color: 'red', cursor: "pointer" }} />
               </span>
             </div>
           </>
@@ -105,6 +109,8 @@ const AppUserDetails = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
+
   return (
 
     <MainCard title="App User Details">
@@ -112,20 +118,40 @@ const AppUserDetails = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
-          <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
+          <DataTable
+            columns={column}
+            data={filter}
+            fixedHeader
+            customStyles={tableHeaderStyle}
+            className='data-table'
             pagination
             subHeader
             subHeaderComponent={
               <>
                 <div className='d-flex justify-content-between'>
                   <div className='d-flex'>
-                    <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
-                      onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon /></div>
+                    <input
+                      type='text'
+                      className='form-control searchInput'
+                      placeholder='Search User Id'
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <div className='searchIcon'>
+                      <SearchOutlinedIcon onClick={handleSearch} style={{ cursor: "pointer" }} />
+                    </div>
+                    <div className='d-flex'>
+                    </div>
                   </div>
                   <div>
-                    <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                    <Button className='csvDiv' onClick={downloadCSV}>
+                      Download
+                      <FileDownloadOutlinedIcon style={{ color: '#EF9848' }} />
+                    </Button>
                   </div>
                 </div>
               </>
@@ -195,7 +221,7 @@ const AppUserDetails = () => {
           <TextField
             margin="dense"
             label="Password"
-            type="password"
+            type="text"
             name="password"
             fullWidth
             value={password}

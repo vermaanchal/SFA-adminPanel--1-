@@ -6,32 +6,37 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import SendingReportHook from './SendingReportHook';
 const SendingReport = () => {
-  const { filter, search, setSearch, downloadCSV, handleFilter, fromDate, toDate, setFromDate, setToDate } = SendingReportHook()
+  const { filter, search, setSearch, downloadCSV, handleFilter,
+     fromDate, toDate, setFromDate, setToDate,handleReset,data } = SendingReportHook()
 
   const column = [
     {
       name: "User Id",
       // selector: id,
       cell: row => <div className="custom-cell">{row.userId}</div>,
-      // width: '100px'
+      width: '200px'
     },
     {
       name: " Name",
       // selector: id,
       cell: row => <div className="custom-cell">{row.name}</div>,
-      // width: '150px'
+      // width: '200px'
     },
 
     {
       name: "Sending",
       // selector: id,
       cell: row => <div className="custom-cell">{row.sending}</div>,
-      // width: '160px'
+      // width: '200px'
     },
     {
       name: " Date ",
       // selector: id,
-      cell: row => <div className="custom-cell">{row.date}</div>,
+      cell: row =>{
+        const dateOnly = row.date.split(' ')[0];
+        return <div className="custom-cell">{dateOnly}</div>;
+    },
+      width:"240px"
     }
     
   ]
@@ -56,6 +61,7 @@ const SendingReport = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -64,6 +70,9 @@ const SendingReport = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
@@ -80,13 +89,19 @@ const SendingReport = () => {
                     <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
                   </div>
                 </div>
-                <div className='my-4 d-flex justify-content-end'>
+                <div className=' my-4 d-flex justify-content-end'>
+                  {/* <div className='col'> */}
                   <label htmlFor='fromDate' className='labelfordate'>From Date:</label>
                   <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} className=' form-control searchDateInput' />
+                  {/* </div> */}
+                  {/* <div className='col'> */}
                   <label htmlFor='toDate' className='labelfordate'>To Date:</label>
                   <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} className=' form-control searchDateInput' />
+                  {/* </div> */}
+                  {/* <div className='col'> */}
                   <button className='btn btn-primary'
                     style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleFilter}>Search</button>
+                  {/* </div> */}
                 </div>
               </>
             }

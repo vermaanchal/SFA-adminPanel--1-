@@ -6,6 +6,7 @@ const ResellerHook = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
+  const [buttonStates, setButtonStates] = useState({});
   // const [id,setId] =useState(null)
   //---------------fetch data---------------//
   const fetchData = async () => {
@@ -50,7 +51,7 @@ const ResellerHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "reseller.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -65,10 +66,11 @@ const ResellerHook = () => {
       return item;
     });
     setFilter(newData);
+    setButtonStates(prevStates => ({ ...prevStates, [userId]: !!value }));
   };
 
   // //---------------create Reseller-------------//
-  const handleSubmit = async () => {
+  const handleSubmit = async (userId) => {
     try {
       for (const row of filter) {
         if (row.resellerTypeId) {
@@ -82,15 +84,20 @@ const ResellerHook = () => {
         }
       }
       toast.success("Reseller created Succesfully")
+      setButtonStates(prevStates => ({ ...prevStates, [userId]: false }));
       fetchData();
     }
     catch (error) {
       console.error('error', error);
     }
   }
-
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleSelectChange
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit,
+     handleSelectChange, data, handleReset,buttonStates
   }
 }
 

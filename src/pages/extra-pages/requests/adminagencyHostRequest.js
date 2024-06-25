@@ -6,12 +6,12 @@ import { Grid, Dialog, DialogContent, IconButton ,Button} from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 // import CsvDownloader from 'react-csv-downloader';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+// import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import RequestHook from './RequestHook';
 const AdminAgencyHostRequest = () => {
-  const { filter, search, setSearch, openPreview, previewImageUrl, handleClosePreview, handleDownload, handleImageClick
-    ,downloadCSV,handleViewMore } = RequestHook()
+  const { filter,openPreview, previewImageUrl, handleClosePreview, handleDownload, handleImageClick
+    ,downloadCSV,handleViewMore,data,handleReset  } = RequestHook()
     
   const column = [
 
@@ -121,6 +121,7 @@ const AdminAgencyHostRequest = () => {
     }
   }
   // const filteredColumns = column.filter(col => col.name !== 'Action'); 
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -129,6 +130,9 @@ const AdminAgencyHostRequest = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
@@ -137,9 +141,9 @@ const AdminAgencyHostRequest = () => {
               <>
                 <div className='d-flex justify-content-between'>
                   <div className='d-flex'>
-                    <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
+                    {/* <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon/></div>
+                    <div className='searchIcon'><SearchOutlinedIcon/></div> */}
                   </div>
                   <div>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>

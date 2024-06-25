@@ -1,11 +1,11 @@
 
 import MainCard from 'components/MainCard';
-import { Grid,IconButton } from '@mui/material';
+import { Grid,IconButton,Dialog, DialogContent, } from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FeedbackReportHook from './feedbackReportHook';
 // import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 const UserReportnFeedback = () => {
-    const {data} =FeedbackReportHook()
+    const {data,openPreview,previewImageUrl,handleClosePreview,handleImageClick} =FeedbackReportHook()
   const column = [
     {
       name: "User Id",
@@ -19,7 +19,7 @@ const UserReportnFeedback = () => {
       cell: row => (
         <>
           <IconButton 
-          // onClick={() => handleImageClick(row.image)}
+          onClick={() => handleImageClick(row.feedbackImage)}
            className='imgPreviewDiv'>
             <img height={70} width={80} src={row.feedbackImage} alt='no-img' />
           </IconButton>
@@ -33,16 +33,20 @@ const UserReportnFeedback = () => {
       // selector: id,
       cell: row => <div className="custom-cell">{row.message}</div>,
       // width: '160px'
-    }, {
-      name: "Type",
-      // selector: id,
-      cell: row => <div className="custom-cell">{row.type}</div>,
-      // width: '160px'
-    }, {
+    },
+    //  {
+    //   name: "Type",
+    //   // selector: id,
+    //   cell: row => <div className="custom-cell">{row.type}</div>,
+    //   // width: '160px'
+    // }, 
+    {
       name: "Date",
       // selector: id,
-      cell: row => <div className="custom-cell">{row.date}</div>,
-      // width: '160px'
+      cell: row => {
+        const dateOnly = row.date.split(' ')[0];
+        return <div className="custom-cell">{dateOnly}</div>;
+    },
     }
   
   ]
@@ -80,6 +84,11 @@ const UserReportnFeedback = () => {
           />
         </div>
       </Grid>
+      <Dialog open={openPreview} onClose={handleClosePreview}>
+        <DialogContent>
+          <img src={previewImageUrl} alt="Preview" width='260px' />
+        </DialogContent>
+      </Dialog>
     </MainCard>
   )
 };

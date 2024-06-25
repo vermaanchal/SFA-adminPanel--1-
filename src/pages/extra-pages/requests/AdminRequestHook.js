@@ -8,6 +8,9 @@ const AdminRequestHook = () => {
   const [filter, setFilter] = useState([])
   const [openPreview, setOpenPreview] = useState(false);
   const [previewImageUrl, setPreviewImageUrl] = useState('');
+  const [status, setStatus] = useState('');
+  const [showApproveButton, setShowApproveButton] = useState(true);
+  const [showRejectButton, setShowRejectButton] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -39,6 +42,7 @@ const AdminRequestHook = () => {
 
   const handleApprove = async (adminId) => {
     try {
+      if (window.confirm("Are you sure to approve the request?")) {
       await fetch(`${baseURLProd}AdminRequestApprove`, {
         method: 'POST',
         body: JSON.stringify({ adminId: adminId }),
@@ -46,7 +50,6 @@ const AdminRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to approve the request?")) {
         const rowIndex = data.findIndex(item => item.adminid === adminId);
         if (rowIndex !== -1) {
           const updatedData = [...data];
@@ -70,6 +73,7 @@ const AdminRequestHook = () => {
 
   const handleReject = async (adminId) => {
     try {
+      if (window.confirm("Are you sure to Reject the Request ?")) {
       await fetch(`${baseURLProd}AdminRequestReject`, {
         method: 'POST',
         body: JSON.stringify({ adminId: adminId }),
@@ -77,7 +81,6 @@ const AdminRequestHook = () => {
           'Content-Type': 'application/json'
         }
       });
-      if (window.confirm("Are you sure to Reject the Request ?")) {
         const rowIndex = data.findIndex(item => item.adminid === adminId);
         if (rowIndex !== -1) {
           const updatedData = [...data];
@@ -176,6 +179,33 @@ const AdminRequestHook = () => {
   //     console.error('Image URL not found in localStorage');
   //   }
   // };
+  const handleStatusChange = (status) => {
+    setStatus(status);
+    setShowApproveButton(true); // Reset to default
+    setShowRejectButton(true); // Reset to default
+  };
+
+  const handleSubmit = () => {
+    if (status) {
+      const filtered = data.filter(item => item.status === status);
+      setFilter(filtered);
+      
+      if (status === 'Approved') {
+        setShowRejectButton(false);
+      } else if (status === 'Rejected') {
+        setShowApproveButton(false);
+      }
+    } else {
+      setFilter(data);
+      setShowApproveButton(true);
+      setShowRejectButton(true);
+    }
+  };
+  const handleReset = () => {
+    setSearch('');
+    setStatus("")
+    setFilter(data);
+  };
   //-------------------image preview---------------//
   const handleImageClick = (imageUrl) => {
     setPreviewImageUrl(imageUrl);
@@ -198,7 +228,7 @@ const AdminRequestHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "Admin_request.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -206,7 +236,8 @@ const AdminRequestHook = () => {
   return {
     filter, search, setSearch, openPreview, setOpenPreview, previewImageUrl, setPreviewImageUrl,
     handleClosePreview, handleDownload, handleImageClick, handleApprove,
-    handleReject, downloadCSV,
+    handleReject, downloadCSV,data,handleReset,handleStatusChange,handleSubmit,status,
+    showApproveButton,showRejectButton
   }
 }
 

@@ -6,6 +6,7 @@ const DeductResellerHook = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState([])
+  const [buttonStates, setButtonStates] = useState({});
 
   //---------------fetch data---------------//
   const fetchData = async () => {
@@ -50,7 +51,7 @@ const DeductResellerHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "deductReseller.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -58,18 +59,29 @@ const DeductResellerHook = () => {
   //-------------select value--------------------
   const handleChange = (e, userId) => {
     const { value } = e.target;
-    const newData = filter.map(item => {
-      if (item.userId === userId) {
-        return { ...item, coinAmount: value };
-      }
-      return item;
-    });
-    setFilter(newData);
+    const validNumberPattern = /^[0-9]*$/;
+    if (!validNumberPattern.test(value)) {
+      window.alert("Coin Amount should be in number only");
+    }
+    else if (!isNaN(value) && Number(value) <= 50000000) {
+      const newData = filter.map(item => {
+        if (item.userId === userId) {
+          return { ...item, coinAmount: value };
+        }
+        return item;
+      });
+      setFilter(newData);
+      setButtonStates(prevStates => ({ ...prevStates, [userId]: !!value }));
+
+    } else {
+      window.alert("Coin Amount can't exceed 50 Million");
+    }
   };
 
   //---------------deduct Reseller-------------//
-  const handleSubmit = async () => {
+  const handleSubmit = async (userId) => {
     try {
+      if (window.confirm("Are you sure to Deduct coins")) {
       for (const row of filter) {
         if (row.userId && row.coinAmount) {
           await fetch(`${baseURLProd}DeductResellerCoin`, {
@@ -81,17 +93,23 @@ const DeductResellerHook = () => {
           });
         }
       }
-      if (window.confirm("Are you sure to Deduct coins")) {
       toast.success("Reseller coins deducted successfully");
       fetchData();
+      setButtonStates(prevStates => ({ ...prevStates, [userId]: false }));
+
       }
     } catch (error) {
       console.error('Error deducting reseller coins:', error);
     }
   }
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
 
   return {
-    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleChange, fetchData
+    filter, search, setSearch, downloadCSV, setFilter, handleSubmit, handleChange, fetchData,
+    data,handleReset,buttonStates
   }
 }
 

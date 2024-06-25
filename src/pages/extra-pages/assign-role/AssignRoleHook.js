@@ -69,6 +69,7 @@ const AssignRoleHook = () => {
         }
     }
     const handleRemove = async (userId) => {
+        if (window.confirm("Are you sure to Remove the Data?")) {
         await fetch(`${baseURLProd}RemoveUserRoles`, {
             method: "POST",
             body: JSON.stringify({ userId: userId }),
@@ -76,16 +77,19 @@ const AssignRoleHook = () => {
                 'Content-Type': 'application/json'
             }
         });
-        if (window.confirm("Are you sure to Remove the Data?")) {
             const newData = data.filter(row => !(row.userid === userId));
             setFilter(newData);
             fetchData();
             toast.success("Role Removed successfully")
         }
     }
+    const handleReset = () => {
+        setSearch('');
+        setFilter(data);
+      };
     return {
         roleId, handleSelectChange, search, setSearch, filter, setUserValue, userValue
-        , handleAssignRole, handleRemove
+        , handleAssignRole, handleRemove,handleReset,data
     }
 }
 

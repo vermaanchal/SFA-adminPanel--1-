@@ -1,6 +1,6 @@
 
 import MainCard from 'components/MainCard';
-import { Grid, Dialog, DialogContent, IconButton ,Button} from '@mui/material';
+import { Grid, Dialog, DialogContent, IconButton, Button, FormControl, MenuItem, Select, InputLabel } from '@mui/material';
 // import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 // import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DataTable from 'react-data-table-component';
@@ -10,9 +10,10 @@ import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import AdminRequestHook from './AdminRequestHook';
 const AdminRequest = () => {
-  const { filter, search, setSearch, openPreview, previewImageUrl, handleClosePreview, handleImageClick
-    , handleApprove,handleReject,downloadCSV,handleDownload } = AdminRequestHook()
-    
+  const { filter, search, setSearch, openPreview, previewImageUrl, handleClosePreview, handleImageClick,status
+    , handleApprove, handleReject, downloadCSV, handleDownload, data,
+     handleReset,handleStatusChange,handleSubmit,showApproveButton,showRejectButton } = AdminRequestHook()
+
   const column = [
 
     {
@@ -61,7 +62,7 @@ const AdminRequest = () => {
           <IconButton onClick={() => handleImageClick(row.adminPhotoBackImage)} className='imgPreviewDiv'>
             <img height={70} width={80} src={row.adminPhotoBackImage} alt='no-img' />
           </IconButton>
-          <FileDownloadOutlinedIcon onClick={() => handleDownload()} style={{ color: '#EF9848',cursor:"pointer" }} />
+          <FileDownloadOutlinedIcon onClick={() => handleDownload()} style={{ color: '#EF9848', cursor: "pointer" }} />
         </>
       ),
       width: '180px'
@@ -81,27 +82,51 @@ const AdminRequest = () => {
     {
       name: 'Action',
       cell: (row) => {
-        const adminId = row.adminid;
-        const isApproved = row.status === 'Approved';
-        const isRejected = row.status === 'Reject';
+        // const adminId = row.adminid;
+        // const isApproved = row.status === 'Approved';
+        // const isRejected = row.status === 'Reject';
         return (
           <>
-            <button
-              className='btn btn-primary me-2'
-              onClick={() => handleApprove(adminId)}
-              disabled={isApproved}
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
-            >
-              Approve
-            </button>
-            <button
-              className='btn btn-primary'
-              onClick={() => handleReject(adminId)}
-              disabled={isRejected}
-              style={{ backgroundColor: '#EF9848', border: '0px' }}
-            >
-              Reject
-            </button>
+              {status === '' && (
+                  <>
+                    <button
+                      className='btn btn-primary me-2'
+                      onClick={() => handleApprove(row.adminid)}
+                      disabled={row.status === 'Approved'}
+                      style={{ backgroundColor: '#EF9848', border: '0px' }}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className='btn btn-primary me-2'
+                      onClick={() => handleReject(row.adminid)}
+                      disabled={row.status === 'Rejected'}
+                      style={{ backgroundColor: '#EF9848', border: '0px' }}
+                    >
+                      Reject
+                    </button>
+                  </>
+                )}
+                  {status === 'Approved' && showApproveButton && (
+                  <button
+                    className='btn btn-primary me-2'
+                    onClick={() => handleApprove(row.id)}
+                    disabled={row.status === 'Approved'}
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                  >
+                    Approved
+                  </button>
+                )}
+                {status === 'Rejected' && showRejectButton && (
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => handleReject(row.id)}
+                    disabled={row.status === 'Rejected'}
+                    style={{ backgroundColor: '#EF9848', border: '0px' }}
+                  >
+                    Rejected
+                  </button>
+                )}
           </>
         );
       },
@@ -131,6 +156,7 @@ const AdminRequest = () => {
     }
   }
   // const filteredColumns = column.filter(col => col.name !== 'Action'); 
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -139,20 +165,60 @@ const AdminRequest = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
-          <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
+          <DataTable
+            columns={column}
+            data={filter}
+            fixedHeader
+            customStyles={tableHeaderStyle}
+            className='data-table'
             pagination
             subHeader
             subHeaderComponent={
               <>
                 <div className='d-flex justify-content-between'>
                   <div className='d-flex'>
-                    <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
-                      onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon/></div>
+                    <input
+                      type='text'
+                      className='form-control searchInput'
+                      placeholder='Search User Id'
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                    <div className='searchIcon'>
+                      <SearchOutlinedIcon />
+                    </div>
                   </div>
+                  <div className=''>
+                    <div className='d-flex'>
+
+                  <FormControl style={{ width: '175px' }}>
+                    <InputLabel id="select-label">Select Status</InputLabel>
+
+                    <Select
+                      labelId="select-label"
+                      label='Select Role'
+                      id="select"
+                      style={{textAlign:"center"}}
+                    // value={roleId}
+                    // onChange={handleSelectChange}
+                    // className='selectDiv'
+                    >
+                      <MenuItem value="1" onClick={() => handleStatusChange('Approved')}>Approved</MenuItem>
+                      <MenuItem value="2"onClick={() => handleStatusChange('Rejected')}>Rejected</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <div className='mx-3 d-flex'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }}onClick={handleSubmit}>Submit</button></div>
+                  </div>
+                    </div>
                   <div>
-                    <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                    <Button className='csvDiv' onClick={downloadCSV}>
+                      Download
+                      <FileDownloadOutlinedIcon style={{ color: '#EF9848' }} />
+                    </Button>
                   </div>
                 </div>
               </>

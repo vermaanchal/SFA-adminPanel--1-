@@ -17,7 +17,9 @@ const RequestHook = () => {
           })
           const res = await req.json();
           setData(res.adminRequestList);
-          setFilter(res.adminRequestList)
+          const approvedData = res.adminRequestList.filter(item => item.status === 'Approved');
+          setFilter(approvedData);
+          console.log(filter)
 
       }
       catch (error) {
@@ -71,18 +73,22 @@ const downloadCSV = () => {
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", "data.csv");
+  link.setAttribute("download", "AdminAgencyHost_request.csv");
   document.body.appendChild(link);
   link.click();
 };
 
   const handleViewMore = async (adminId) => {
       window.location.href = `/AdminAgencyHost/${adminId}`;
+      
   };
-
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
   return {
     filter, search,  setSearch,openPreview, setOpenPreview,previewImageUrl, setPreviewImageUrl,
-    handleClosePreview, handleImageClick, handleDownload,downloadCSV,handleViewMore
+    handleClosePreview, handleImageClick, handleDownload,downloadCSV,handleViewMore,data,handleReset
 }
 }
 

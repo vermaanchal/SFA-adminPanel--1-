@@ -61,31 +61,50 @@ const AgencyReceivingReport = () => {
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", "agencyreceiving_report.csv");
         document.body.appendChild(link);
         link.click();
     };
 
     const handleBack = () => {
-        window.location.assign('/HostReceivingReport')
+        if (fromDate && toDate) {
+            setFromDate("")
+            setToDate("")
+            fetchData();
+        }
+        else if (search) {
+            setSearch("")
+            fetchData()
+        }
+        else {
+            window.location.assign('/HostReceivingReport')
+        }
     }
-
+    //-----------------date picker---------------//
     const handleFilter = () => {
         const filtered = data.filter(item => {
             const parts = item.created_date.split('-');
             const day = parseInt(parts[0], 10);
-            const month = parseInt(parts[1], 10) - 1; 
+            const month = parseInt(parts[1], 10) - 1;
             const year = parseInt(parts[2], 10);
-      
+
             const date = new Date(year, month, day);
-      
-            const from = fromDate ? new Date(fromDate) : null;
-            const to = toDate ? new Date(toDate) : null;
-      
+
+            let from = fromDate ? new Date(fromDate) : null;
+            let to = toDate ? new Date(toDate) : null;
+
+            if (from) {
+                from.setHours(0, 0, 0, 0);
+            }
+            if (to) {
+                to.setHours(23, 59, 59, 999);
+            }
             return (!from || date >= from) && (!to || date <= to);
         });
+
         setFilter(filtered);
-      };
+    };
+
     const column = [
         {
             name: "User Id",
@@ -116,7 +135,7 @@ const AgencyReceivingReport = () => {
             // selector: id,
             cell: row => <div className="custom-cell">{row.totalBeans}</div>,
         },
-        
+
         {
             name: "Agency Code",
             // selector: id,
@@ -124,8 +143,10 @@ const AgencyReceivingReport = () => {
         },
         {
             name: "Month Date",
-            // selector: id,
-            cell: row => <div className="custom-cell">{row.created_date}</div>,
+            cell: row => {
+                const dateOnly = row.created_date.split(' ')[0];
+                return <div className="custom-cell">{dateOnly}</div>;
+            },
         }
 
     ]
@@ -158,37 +179,37 @@ const AgencyReceivingReport = () => {
                 <Grid >
                     <ToastContainer />
                 </Grid>
-        <div><button className='btn btn-primary mb-3'   style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div>
+                <div><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleBack}>Back</button></div>
                 <div className='text-end'>
                     {filter ?
-                    <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
-                        pagination
-                        subHeader
-                        subHeaderComponent={
-                            <>
-                                <div className='d-flex justify-content-between'>
-                                    <div className='d-flex'>
-                                        <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
-                                            onChange={(e) => setSearch(e.target.value)}></input>
-                                        <div className='searchIcon'><SearchOutlinedIcon /></div>
+                        <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
+                            pagination
+                            subHeader
+                            subHeaderComponent={
+                                <>
+                                    <div className='d-flex justify-content-between'>
+                                        <div className='d-flex'>
+                                            <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
+                                                onChange={(e) => setSearch(e.target.value)}></input>
+                                            <div className='searchIcon'><SearchOutlinedIcon /></div>
+                                        </div>
+                                        <div>
+                                            <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <Button className='csvDiv' onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>
+                                    <div className='my-4 d-flex justify-content-end'>
+                                        <label htmlFor='fromDate' className='labelfordate'>From Date:</label>
+                                        <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} className=' form-control searchDateInput' />
+                                        <label htmlFor='toDate' className='labelfordate'>To Date:</label>
+                                        <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} className=' form-control searchDateInput' />
+                                        <button className='btn btn-primary'
+                                            style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleFilter}>Search</button>
                                     </div>
-                                </div>
-                                <div className='my-4 d-flex justify-content-end'>
-                                    <label htmlFor='fromDate' className='labelfordate'>From Date:</label>
-                                    <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} className=' form-control searchDateInput' />
-                                    <label htmlFor='toDate' className='labelfordate'>To Date:</label>
-                                    <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} className=' form-control searchDateInput' />
-                                    <button className='btn btn-primary'
-                                        style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleFilter}>Search</button>
-                                </div>
-                            </>
-                        }
-                    />
-                    :
-                    {message}
+                                </>
+                            }
+                        />
+                        :
+                        { message }
                     }
                 </div>
             </Grid>

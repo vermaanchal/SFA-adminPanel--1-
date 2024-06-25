@@ -48,7 +48,7 @@ const TripleSevenHook = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "777game.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -57,30 +57,39 @@ const TripleSevenHook = () => {
   const handleGameBtn = async () => {
 
     try {
-     await fetch(`${baseURLProd}Game777_Visibility`, {
-        method: 'POST',
-        body: JSON.stringify({ gameStatus: selectgame }),
-        headers: {
-          'Content-Type': 'application/json'
+      if(selectgame !== ""){
+        await fetch(`${baseURLProd}Game777_Visibility`, {
+           method: 'POST',
+           body: JSON.stringify({ gameStatus: selectgame }),
+           headers: {
+             'Content-Type': 'application/json'
+           }
+         });
+         if(selectgame == '1'){
+           toast.success("Game Enabled Succesfully")
+           setSelectGame("")
+         }
+         else if(selectgame == '0'){
+           toast.warning("Game disabled Succesfully")
+             setSelectGame("")
+         }
         }
-      });
-      if(selectgame == '1'){
-        toast.success("Game Enabled Succesfully")
-      }
-      else{
-        toast.warning("Game disabled Succesfully")
-        setTimeout(() => {
-          setSelectGame("")
-        }, 3000);
-      }
+        else{
+         window.alert("please select to proceed further")
+        }
       // fetchData();
     }
     catch (error) {
       console.error('error', error);
     }
   }
+  const handleReset = () => {
+    setSearch('');
+    setFilter(data);
+  };
   return {
-    filter, search, setSearch, downloadCSV, selectgame, setSelectGame, handleGameBtn
+    filter, search, setSearch, downloadCSV, selectgame,
+     setSelectGame, handleGameBtn,handleReset,data
   }
 }
 

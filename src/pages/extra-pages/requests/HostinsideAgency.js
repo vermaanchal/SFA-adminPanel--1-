@@ -6,7 +6,7 @@ import { Grid, Dialog, DialogContent, IconButton ,Button} from '@mui/material';
 import DataTable from 'react-data-table-component';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 // import CsvDownloader from 'react-csv-downloader';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+// import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { ToastContainer } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ const HostInsideAgency = () => {
   const {openPreview,previewImageUrl,handleClosePreview, handleImageClick,handleDownload} =RequestHook()
     const params =useParams()
     const [data, setData] = useState([]);
-    const [search, setSearch] = useState('')
+    // const [search, setSearch] = useState('')
     const [filter, setFilter] = useState([])
     const [message,setmessage] =useState('')
     //---------------fetch data---------------//
@@ -34,7 +34,9 @@ const HostInsideAgency = () => {
         const res = await req.json();
         if(res.status == true){
           setData(res.hostRequestList);
-          setFilter(res.hostRequestList);
+          const approvedData = res.hostRequestList.filter(item => item.status === 'Approve');
+          setFilter(approvedData);
+          console.log(filter,data)
         }
         else{
           setmessage("no data available")
@@ -47,13 +49,6 @@ const HostInsideAgency = () => {
     useEffect(() => {
       fetchData();
     }, []);
-  //--------------------filter------------------//
-  useEffect(() => {
-    const result = data.filter((item) => {
-      return item.userId.toLowerCase().match(search.toLocaleLowerCase())
-    })
-    setFilter(result)
-  }, [search])
 
   //----------------download CSV file-----------------//
   const downloadCSV = () => {
@@ -68,7 +63,7 @@ const HostInsideAgency = () => {
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement("a");
     link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "data.csv");
+    link.setAttribute("download", "HostInsideAgency_request.csv");
     document.body.appendChild(link);
     link.click();
   };
@@ -184,9 +179,9 @@ const HostInsideAgency = () => {
               <>
                 <div className='d-flex justify-content-between'>
                   <div className='d-flex'>
-                    <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
+                    {/* <input type='text' className=' form-control searchInput' placeholder='Search User Id' value={search}
                       onChange={(e) => setSearch(e.target.value)}></input>
-                    <div className='searchIcon'><SearchOutlinedIcon/></div>
+                    <div className='searchIcon'><SearchOutlinedIcon/></div> */}
                   </div>
                   <div>
                     <Button className='csvDiv'onClick={downloadCSV} >Download<FileDownloadOutlinedIcon style={{ color: '#EF9848' }} /></Button>

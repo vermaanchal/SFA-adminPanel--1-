@@ -9,8 +9,8 @@ import VideoUploadHook from './videoUploadHook';
 
 const VideoUploadRecord = () => {
   const { openPreview, previewImageUrl, openVideoPreview, videoUrl, setSearch, handleImageClick,
-    handleClosePreview, handleVideoPreview, handleCloseVideoPreview, handleDownload, handleDelete,
-    downloadCSV,filter,search } = VideoUploadHook()
+    handleClosePreview, handleVideoPreview, handleCloseVideoPreview, handleDelete,
+    downloadCSV,filter,search,handleReset,data } = VideoUploadHook()
 
   const column = [
     {
@@ -28,7 +28,7 @@ const VideoUploadRecord = () => {
           <IconButton onClick={() => handleImageClick(row.usersImagePath)} className='imgPreviewDiv'>
             <img height={70} width={80} src={row.usersImagePath} alt='no-img' />
           </IconButton>
-          <FileDownloadOutlinedIcon onClick={() => handleDownload(row.usersImagePath, 'image.jpg')} style={{ color: '#EF9848', cursor: "pointer" }} />
+          {/* <FileDownloadOutlinedIcon onClick={() => handleDownload(row.usersImagePath, 'image.jpg')} style={{ color: '#EF9848', cursor: "pointer" }} /> */}
         </>
       ),
     },
@@ -84,6 +84,7 @@ const VideoUploadRecord = () => {
       }
     }
   }
+  const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -92,6 +93,9 @@ const VideoUploadRecord = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle}
             highlightOnHover pagination

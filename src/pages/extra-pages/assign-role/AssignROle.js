@@ -65,6 +65,7 @@ const AssignRole = () => {
       }
     }
   }
+  // const isFiltered = filter.length !== data.length;
 
   return (
 
@@ -73,6 +74,9 @@ const AssignRole = () => {
         <Grid >
           <ToastContainer />
         </Grid>
+        {/* {isFiltered && (
+          <div className='mx-3'><button className='btn btn-primary mb-3' style={{ backgroundColor: '#EF9848', border: '0px' }} onClick={handleReset} >Back</button></div>
+        )} */}
         <div className='text-end'>
           <DataTable columns={column} data={filter} fixedHeader customStyles={tableHeaderStyle} className='data-table'
             pagination
